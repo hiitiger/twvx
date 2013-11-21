@@ -12,6 +12,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uidemo", "uidemo\uidemo.vcp
 		{67E4349C-0185-3B7F-9DFD-14D85F70F4DC} = {67E4349C-0185-3B7F-9DFD-14D85F70F4DC}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twimg", "twimg\twimg.vcproj", "{DEF39667-689B-3075-A294-3987BD731F66}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1618777A-6A9C-32C0-BE47-4FC736B1D034} = {1618777A-6A9C-32C0-BE47-4FC736B1D034}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -30,6 +35,10 @@ Global
 		{DAA1B66A-B1B0-3D14-93D6-59AC7976ACA7}.Debug|Win32.Build.0 = Debug|Win32
 		{DAA1B66A-B1B0-3D14-93D6-59AC7976ACA7}.Release|Win32.ActiveCfg = Release|Win32
 		{DAA1B66A-B1B0-3D14-93D6-59AC7976ACA7}.Release|Win32.Build.0 = Release|Win32
+		{DEF39667-689B-3075-A294-3987BD731F66}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DEF39667-689B-3075-A294-3987BD731F66}.Debug|Win32.Build.0 = Debug|Win32
+		{DEF39667-689B-3075-A294-3987BD731F66}.Release|Win32.ActiveCfg = Release|Win32
+		{DEF39667-689B-3075-A294-3987BD731F66}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
