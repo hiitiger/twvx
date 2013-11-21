@@ -15,7 +15,7 @@ namespace TwE
 
     enum TwE_AppEventId
     {
-        AppEventIdBegin = TwUserEventIdEnd,
+        AppEventIdBegin = TwUserEventIdBegin,
         AppEventIdEnd = TwUserEventIdEnd
     };
 }
