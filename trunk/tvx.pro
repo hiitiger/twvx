@@ -7,3 +7,4 @@ INCLUDEPATH += .
 SUBDIRS += twgui
 SUBDIRS += twcxx
 SUBDIRS += uidemo
+SUBDIRS += twimg
