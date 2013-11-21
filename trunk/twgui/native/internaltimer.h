@@ -8,7 +8,7 @@ class TwTimer;
 class TwInternalTimer : public SimpleWindowBase<TwInternalTimer>
 {
 public:
-    static TwInternalTimer&  instance();
+    static TwInternalTimer*  instance();
     TwInternalTimer();
     
     int setTimer(int elapseMSecs,TwTimer* timer);

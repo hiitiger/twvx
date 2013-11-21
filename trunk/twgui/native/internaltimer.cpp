@@ -2,6 +2,10 @@
 #include "internaltimer.h"
 #include "core/twtimer.h"
 
+#include "twsingleton.h"
+
+TwDefine_SingleTon(TwInternalTimer,_twInternalTimer);
+
 TwInternalTimer::TwInternalTimer()
 : m_nextTimerId(1)
 {
@@ -50,8 +54,7 @@ int TwInternalTimer::nextTimerId()
     return m_nextTimerId++;
 }
 
-TwInternalTimer&  TwInternalTimer::instance()
+TwInternalTimer*  TwInternalTimer::instance()
 {
-    static TwInternalTimer stt ;
-    return stt;
+   return _twInternalTimer();
 }

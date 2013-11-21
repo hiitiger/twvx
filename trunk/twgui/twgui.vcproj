@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="twgui"
-	ProjectGUID="{068DFE97-1F9E-3F6F-B7DB-223E358A527C}"
+	ProjectGUID="{67E4349C-0185-3B7F-9DFD-14D85F70F4DC}"
 	Keyword="Qt4VSv1.0">
 	<Platforms>
 		<Platform
@@ -19,7 +19,7 @@
 			UseOfMfc="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,c:\Qt\4.7.1\mkspecs\default"
+				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,&quot;..\include\twcxx&quot;,&quot;..\include\twgui&quot;,c:\Qt\4.7.1\mkspecs\default"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				AssemblerListingLocation="..\objdir\$(ProjectName)\$(ConfigurationName)\"
 				BufferSecurityCheck="false"
@@ -43,6 +43,7 @@
 				Name="VCCustomBuildTool" />
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="twcxx.lib"
 				AdditionalLibraryDirectories="..\lib\$(ConfigurationName),$(TargetDir)"
 				GenerateDebugInformation="true"
 				IgnoreImportLibrary="true"
@@ -75,7 +76,7 @@
 			UseOfMfc="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,c:\Qt\4.7.1\mkspecs\default"
+				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,&quot;..\include\twcxx&quot;,&quot;..\include\twgui&quot;,c:\Qt\4.7.1\mkspecs\default"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				AssemblerListingLocation="..\objdir\$(ProjectName)\$(ConfigurationName)\"
 				BufferSecurityCheck="false"
@@ -99,6 +100,7 @@
 				Name="VCCustomBuildTool" />
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="twcxx.lib"
 				AdditionalLibraryDirectories="..\lib\$(ConfigurationName),$(TargetDir)"
 				GenerateDebugInformation="false"
 				IgnoreImportLibrary="true"
@@ -132,11 +134,19 @@
 			<File
 				RelativePath="native\internaltimer.cpp" />
 			<File
-				RelativePath="eventloop\msgloop.cpp" />
+				RelativePath="event\msgloop.cpp" />
 			<File
 				RelativePath="native\simplewindowbase.cpp" />
 			<File
 				RelativePath="core\twapp.cpp" />
+			<File
+				RelativePath="event\twappevent.cpp" />
+			<File
+				RelativePath="native\twappwindow.cpp" />
+			<File
+				RelativePath="core\twasynctaskservice.cpp" />
+			<File
+				RelativePath="event\twevent.cpp" />
 			<File
 				RelativePath="core\twobject.cpp" />
 			<File
@@ -149,9 +159,11 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
+				RelativePath="core\iasynctask.h" />
+			<File
 				RelativePath="native\internaltimer.h" />
 			<File
-				RelativePath="eventloop\msgloop.h" />
+				RelativePath="event\msgloop.h" />
 			<File
 				RelativePath="native\simplewindowbase.h" />
 			<File
@@ -175,6 +187,18 @@
 			</File>
 			<File
 				RelativePath="core\twapp.h" />
+			<File
+				RelativePath="event\twappevent.h" />
+			<File
+				RelativePath="native\twappwindow.h" />
+			<File
+				RelativePath="core\twasynctaskservice.h" />
+			<File
+				RelativePath="event\twevent.h" />
+			<File
+				RelativePath="twguiconfig.h" />
+			<File
+				RelativePath="twguiinternaldefine.h" />
 			<File
 				RelativePath="core\twobject.h" />
 			<File

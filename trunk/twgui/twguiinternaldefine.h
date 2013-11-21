@@ -1,0 +1,23 @@
+#pragma once
+#include "twguiconfig.h"
+
+namespace TwE
+{
+    enum TwE_InterGlobalEventId
+    {
+        EventIdBegin = TwInterGlobalEventIdBegin,
+        EventIdTwApp,
+        EventIdAyncsTask,
+        EventIdDeleteServer,
+
+        EventIdEnd = TwInterGlobalEventIdEnd
+    };
+
+    enum TwE_AppEventId
+    {
+        AppEventIdBegin = TwUserEventIdEnd,
+        AppEventIdEnd = TwUserEventIdEnd
+    };
+}
+
+#define  WM_TW_SENDAPPEVNT WM_APP + 1

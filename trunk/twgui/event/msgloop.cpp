@@ -19,7 +19,6 @@ int TwEventLoop::run()
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
-        sigAsyncTask.emit();
     }
     return msg.wParam;
 }
