@@ -1,5 +1,5 @@
 #pragma once
-
+#include <list>
 /*
 TwObject is the base object type of all framework objects.
 It supports:
@@ -26,8 +26,10 @@ public:
     sObjHelper *getHelper() const;
 
 private:
-    sObjHelper *_sObjHelper;
+    void _delChildren();
 
 private:
     TwObject* m_parent;
+    sObjHelper *_sObjHelper;
+    std::list<TwObject*> m_children;
 };

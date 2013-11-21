@@ -71,6 +71,9 @@ public:
 
     HWND Window() const { return m_hwnd; }
 
+    LRESULT SendMessage(UINT m,WPARAM w,LPARAM l) {return ::SendMessage(m_hwnd,m,w,l);}
+    LRESULT PostMessage(UINT m,WPARAM w,LPARAM l) {return ::PostMessage(m_hwnd,m,w,l);}
+
 protected:
 
     virtual PCWSTR  ClassName() const {return L"TvxSimpleWindowClass";}

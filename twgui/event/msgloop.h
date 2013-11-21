@@ -13,10 +13,5 @@ public:
 
     int run();
 
-public TwSignal:
-    sigslot::signal0<> sigIdle;
-    sigslot::signal0<> sigAsyncTask;
-    sigslot::signal0<> sigQuit;
-
 private:
 };

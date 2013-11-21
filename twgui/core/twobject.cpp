@@ -17,7 +17,15 @@ TwObject::~TwObject()
     {
         _sObjHelper->clearPtr( this);
     }
+
+    _delChildren();
 }
+
+void TwObject::_delChildren()
+{
+    //TXXTODO:
+}
+
 
 sObjHelper * TwObject::getHelper() const
 {
@@ -39,5 +47,10 @@ void TwObject::setParent( TwObject* parent )
 TwObject* TwObject::parent() const
 {
     return m_parent;
+}
+
+void TwObject::deleteLater()
+{
+    //TXXTODO:
 }
 

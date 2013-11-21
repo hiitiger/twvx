@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="twcxx"
-	ProjectGUID="{9BE43178-F91F-3B1C-9866-794C4B3811A7}"
+	ProjectGUID="{1618777A-6A9C-32C0-BE47-4FC736B1D034}"
 	Keyword="Qt4VSv1.0">
 	<Platforms>
 		<Platform
@@ -19,7 +19,7 @@
 			UseOfMfc="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,c:\Qt\4.7.1\mkspecs\default"
+				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,&quot;..\include\twcxx&quot;,&quot;..\include\twgui&quot;,c:\Qt\4.7.1\mkspecs\default"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				AssemblerListingLocation="..\objdir\$(ProjectName)\$(ConfigurationName)\"
 				BufferSecurityCheck="false"
@@ -75,7 +75,7 @@
 			UseOfMfc="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,c:\Qt\4.7.1\mkspecs\default"
+				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,&quot;..\include\twcxx&quot;,&quot;..\include\twgui&quot;,c:\Qt\4.7.1\mkspecs\default"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				AssemblerListingLocation="..\objdir\$(ProjectName)\$(ConfigurationName)\"
 				BufferSecurityCheck="false"
@@ -126,9 +126,20 @@
 	</Configurations>
 	<Files>
 		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			<File
+				RelativePath="thread\Twsync.cpp" />
+			<File
+				RelativePath="base\twsingleton.cpp" />
+		</Filter>
+		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath="thread\Twsync.h" />
 			<File
 				RelativePath="stable.h">
 				<FileConfiguration
@@ -148,6 +159,8 @@
 						Outputs="stable.h.cpp" />
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="base\twsingleton.h" />
 		</Filter>
 		<Filter
 			Name="Generated Files"

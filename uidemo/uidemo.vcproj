@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="uidemo"
-	ProjectGUID="{24B7D231-8DD4-35FD-B233-EAD93E1E6C42}"
+	ProjectGUID="{DAA1B66A-B1B0-3D14-93D6-59AC7976ACA7}"
 	Keyword="Qt4VSv1.0">
 	<Platforms>
 		<Platform
@@ -19,7 +19,7 @@
 			UseOfMfc="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,c:\Qt\4.7.1\mkspecs\default"
+				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,&quot;..\include\twcxx&quot;,&quot;..\include\twgui&quot;,c:\Qt\4.7.1\mkspecs\default"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				AssemblerListingLocation="..\objdir\$(ProjectName)\$(ConfigurationName)\"
 				BufferSecurityCheck="false"
@@ -77,7 +77,7 @@
 			UseOfMfc="0">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,c:\Qt\4.7.1\mkspecs\default"
+				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\include&quot;,&quot;..\include\twcxx&quot;,&quot;..\include\twgui&quot;,c:\Qt\4.7.1\mkspecs\default"
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				AssemblerListingLocation="..\objdir\$(ProjectName)\$(ConfigurationName)\"
 				BufferSecurityCheck="false"

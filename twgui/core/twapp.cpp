@@ -1,12 +1,26 @@
 #include "stable.h"
+
+#include "twguiinternaldefine.h"
+#include "event/msgloop.h"
+#include "native/twappwindow.h"
+#include "twasynctaskservice.h"
 #include "twapp.h"
-#include "eventloop/msgloop.h"
+
+
+TwApp* g_TWGLOBAL_TwApp = NULL;
+
+TW_GUI_API TwApp* twApp()
+{
+    return g_TWGLOBAL_TwApp;
+}
+
 
 
 TwApp::TwApp()
 :TwObject(NULL)
+, m_appDriver(new TwAppDriver())
 {
-
+    g_TWGLOBAL_TwApp = this;
 }
 
 TwApp::~TwApp()
@@ -17,10 +31,11 @@ TwApp::~TwApp()
 int TwApp::run()
 {
     TwEventLoop eventLoop;
-    eventLoop.sigIdle.connect(this,&TwApp::onIdle);
-    eventLoop.sigAsyncTask.connect(this,&TwApp::onAsyncTask);
-    eventLoop.sigQuit.connect(this,&TwApp::onQuit);
-    return eventLoop.run();
+    int ret = eventLoop.run();
+
+    delete m_appDriver;
+    m_appDriver = NULL;
+    return ret;
 }
 
 void TwApp::quit()
@@ -30,17 +45,10 @@ void TwApp::quit()
 
 void TwApp::onIdle()
 {
-
 }
 
-void TwApp::onAsyncTask()
+void TwApp::onAboutQuit()
 {
-
-}
-
-void TwApp::onQuit()
-{
-
 }
 
 std::vector<std::wstring> TwApp::cmdArgs()
@@ -48,4 +56,34 @@ std::vector<std::wstring> TwApp::cmdArgs()
     std::vector<std::wstring> argV;
     return argV;
 }
+
+bool TwApp::registerInterEventId( int id )
+{
+    if (id < TwE::EventIdBegin || id > TwE::EventIdEnd)
+    {
+        return false;
+    }
+    return m_appDriver->registerAppEventId(id);
+}
+
+bool TwApp::registerAppEventId( int id )
+{
+    if (id < TwE::AppEventIdBegin || id > TwE::AppEventIdEnd)
+    {
+        return false;
+    }
+    return m_appDriver->registerAppEventId(id);
+}
+
+void TwApp::postAppEvent( int id )
+{
+    m_appDriver->postAppEvent(id);
+}   
+
+void TwApp::appendAysncTask( IAsyncTask* task)
+{
+    twAsyncTaskService()->appendTask(task);
+}
+
+
 

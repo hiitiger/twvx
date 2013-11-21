@@ -47,7 +47,7 @@ void TwTimer::start( int milliseconds )
     }
     
     m_elapseMSecs = milliseconds;
-    m_timerId = TwInternalTimer::instance().setTimer(m_elapseMSecs, this);
+    m_timerId = TwInternalTimer::instance()->setTimer(m_elapseMSecs, this);
 }
 
 void TwTimer::stop()
@@ -56,7 +56,7 @@ void TwTimer::stop()
     {
         return;
     }
-    TwInternalTimer::instance().killTimer(m_timerId);
+    TwInternalTimer::instance()->killTimer(m_timerId);
     m_timerId = -1;
     m_elapseMSecs = -1;
 }
