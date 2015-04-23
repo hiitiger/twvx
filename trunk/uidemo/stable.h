@@ -1,3 +1,7 @@
 #pragma once
-#include "twglobal.h"
 #include <Windows.h>
+
+#include "twglobal.h"
+
+#include "twbase.h"
+#include "twgui.h"

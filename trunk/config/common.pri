@@ -1,16 +1,17 @@
 
 CONFIG -= qt
+CONFIG += c++11
 
 PRECOMPILED_HEADER = stable.h
 
 INCLUDEPATH += .
 INCLUDEPATH += ../include
-INCLUDEPATH += ../include/twcxx
+INCLUDEPATH += ../include/twbase
 INCLUDEPATH += ../include/twgui
 
 
-QMAKE_LIBDIR += ../lib/$(ConfigurationName)
-QMAKE_LIBDIR += "$(TargetDir)"
+QMAKE_LIBDIR += ../lib/$(Configuration)
+QMAKE_LIBDIR += ../bin/$(Configuration)
 
-DESTDIR = ../bin/$(ConfigurationName)
-OBJECTS_DIR = ../objdir/$(ProjectName)/$(ConfigurationName)
+DESTDIR = ../bin/$(Configuration)
+OBJECTS_DIR = ../objdir/$(ProjectName)/$(Configuration)

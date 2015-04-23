@@ -1,13 +1,10 @@
 #pragma once
-#include <vector>
-#include <string>
-#include "twobject.h"
-#include "tools/xsigslot.h"
-#include "iasynctask.h"
 
-class TwAppDriver;
+class TwWindowManager;
+class TwWICImagingFactory;
+class TwRendererResourceProvider;
 
-class TW_GUI_API TwApp : public TwObject, public sigslot::has_slots<>
+class TW_GUI_API TwApp : public TwObject
 {
     TW_NONCOPY(TwApp);
 public:
@@ -15,32 +12,23 @@ public:
     virtual ~TwApp();
 
     int run();
-
-    
-    void appendAysncTask(IAsyncTask*);
-    
-    bool registerAppEventId(int id);
-    void postAppEvent(int id);
-
-    bool registerInterEventId(int id);
+    void quit();
 
     std::vector<std::wstring> cmdArgs();
 
-public TwSignal:
-    sigslot::signal1<int> sigTwAppEvent;
+    TwWindowManager* windowManager() const; 
+    TwWICImagingFactory* imagingFactory() const;
+    TwRendererResourceProvider* rendererResourceProvider() const;
 
-public TwSlot:
-    void quit();
-
-private TwSlot:
-    //eventloop signal handler
-    void onIdle();
-    void onAboutQuit();
-    void onSxxEvent();
+protected :
+    virtual void onAboutQuit();
 
     //
 private:
-    TwAppDriver* m_appDriver;
+    TwScopedPtr<TwMessageLoop> m_eventLoop;
+    TwScopedPtr<TwWindowManager> m_windowManager;
+    TwScopedPtr<TwWICImagingFactory> m_imagingFactory;
+    TwScopedPtr<TwRendererResourceProvider> m_rendererResourceProvider;
 };
 
 TW_GUI_API TwApp* twApp();

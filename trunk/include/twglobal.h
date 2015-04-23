@@ -6,13 +6,13 @@
 #define  TW_GUI_API __declspec( dllimport )
 #endif
 
-#ifdef TW_DLL_CXX
-#define TW_CXX_API __declspec( dllexport )
+#ifdef TW_DLL_BASE
+#define TW_BASE_API __declspec( dllexport )
 #else
-#define  TW_CXX_API __declspec( dllimport )
+#define  TW_BASE_API __declspec( dllimport )
 #endif
 
-#define  TWUNUSED(XXX) (XXX);
+#define  TW_UNUSED(XXX) (XXX);
 
 #define TW_NONCOPY(classname) \
     private:\
@@ -20,10 +20,10 @@
     classname &operator=(const classname &);
 
 
-// disable warning when use xsignal
+// 
 #pragma warning( disable : 4251 )
 #pragma warning( disable : 4275 )
 
 
-#define  TwSignal
-#define  TwSlot
+#define  Tw_Signal
+#define  Tw_Slot

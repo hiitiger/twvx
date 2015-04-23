@@ -1,0 +1,16 @@
+#include "../twgui/widget/twsimpletextwidget.h"
+#include "../twgui/widget/twimagewidget.h"
+#include "../twgui/widget/twframewidget.h"
+#include "../twgui/widget/twlabel.h"
+#include "../twgui/widget/twbutton.h"
+#include "../twgui/widget/twtextbutton.h"
+#include "../twgui/widget/twswitchbutton.h"
+#include "../twgui/widget/twslider.h"
+#include "../twgui/widget/twprogressbar.h"
+#include "../twgui/widget/twscrollbar.h"
+#include "../twgui/widget/twscrollview.h"
+#include "../twgui/widget/twstackedview.h"
+
+#include "../twgui/models/twmodelview.h"
+#include "../twgui/models/twlistview.h"
+

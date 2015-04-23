@@ -5,9 +5,11 @@
 class TwAppEvent : public TwEvent
 {
 public:
-    TwAppEvent();
+    TwAppEvent(int serviceId);
     virtual ~TwAppEvent();
 
+    int serviceId() const;
 
 private:
+    int m_serviceId;
 };

@@ -1,0 +1,36 @@
+编译：
+1. 安装VS2012
+2. 安装Qt5-VS2012-X86
+3. 修改Qt bin目录下qtenv2.bat文件内容，路径根据安装路径替换：
+echo off
+echo Setting up environment for Qt usage...
+set PATH=D:\Qt\Qt5.2.1\5.2.1\msvc2012\bin;%PATH%
+echo Set Qt 5.2.1
+"D:/Program Files (x86)/Microsoft Visual Studio 11.0/VC/bin/vcvars32.bat"
+cd %%1
+4.添加Qt命令行右键菜单
+@echo off 
+reg add "HKCR\*\shell\Qt5-dos" /ve /d Qt5 /f 
+reg add "HKCR\*\shell\Qt5-dos\command" /ve /d "C:\Windows\System32\cmd.exe /A /Q /K D:\Qt\Qt5.2.1\5.2.1\msvc2012\bin\qtenv2.bat cd %%1" /f
+reg add "HKCR\Folder\shell\Qt5-dos" /ve /d Qt5 /f 
+reg add "HKCR\Folder\shell\Qt5-dos\command" /ve /d "C:\Windows\System32\cmd.exe /A /Q /K D:\Qt\Qt5.2.1\5.2.1\msvc2012\bin\qtenv2.bat cd %%1" /f 
+5.在Qt5命令行下make.bat，自动生成vs工程文件
+
+
+代码Log:
+
+1. UI类
+ * TwWindow:窗口，可以处理Windows消息和TwEvent, 具备事件分发能力
+ * TwWidget:Dui控件，可以处理TwEvent
+ * TwRootWidget:与窗口一样大小的根widget
+
+2. 窗口事件传递过程：
+ * native smg and sent/posted  twevent --> TwEventPort::processEvent--> {1.hooks process, 2. TwEventPort::onEvent()}
+ * subclass TwEventPort,  SubClass::onEvent() --> TwEventDispatcher::dispatchEvent()
+
+3. 消息循环的处理
+ * process message, run task , wait for work .
+ * 一个线程只能有一个消息循环！
+ * 加入twbaseservice到消息循环中，有些处理是线程唯一的.
+
+
