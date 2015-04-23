@@ -1,0 +1,26 @@
+
+布局树--控件树--对象树
+（-->析构顺序，<--构建顺序）
+
+对象树负责管理生命期
+控件树负责界面体系，事件分发
+布局树只排版位置和尺寸
+
+事件处理:
+1.考虑disable状态下事件的过滤
+2.
+
+children order:
+dirty后什么时候进行排序
+1.layout的时候不进行排序，layout只关注布局树，与控件树无关
+2.eventHandlerFromPoint 里不进行排序，因为此刻画出来的界面里的控件树才是当前应该遵守的控件树
+3.应该在paint里排序
+
+
+layout:
+1.dirty后抛异步事件，避免频繁layout
+2.计算prefferedSize 做缓存
+
+控件树里的信息同步:
+1.enable信息需要进行同步，父亲控件的enable状态影响子控件
+2.visible不需要进行同步，因为绘制的时候已经保证隐藏的父控件不会绘制子控件, eventHandlerFromPoint也会过滤掉隐藏的父亲

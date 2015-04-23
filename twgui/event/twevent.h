@@ -1,11 +1,20 @@
 #pragma once
+#include "twuinamespace.h"
 
-#include "core/twobject.h"
-
-class TwEvent 
+class TW_GUI_API TwEvent
 {
 public:
-    TwEvent();
+    explicit TwEvent(Tw::EventType id);
     virtual ~TwEvent();
+
+    int id() const;
+
+    static int registerEvent();
+    void accept();
+    void reject();
+    bool accepted() const;
+
 private:
+    int m_evId;
+    bool m_accepted;
 };

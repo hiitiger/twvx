@@ -1,50 +1,54 @@
 #include "stable.h"
 
-#include "twguiinternaldefine.h"
-#include "event/msgloop.h"
-#include "native/twappwindow.h"
-#include "twasynctaskservice.h"
+#include "config/twappconfig.h"
+#include "twmsgloop.h"
+#include "kernel/twwindowmanager.h"
+#include "twpainter.h"
+#include "renderer/twrenderresourceprovider.h"
+
 #include "twapp.h"
 
+TwApp* g_TWGLOBAL_TwApp = nullptr;
 
-TwApp* g_TWGLOBAL_TwApp = NULL;
-
-TW_GUI_API TwApp* twApp()
+TwApp* twApp()
 {
     return g_TWGLOBAL_TwApp;
 }
 
 
-
 TwApp::TwApp()
-:TwObject(NULL)
-, m_appDriver(new TwAppDriver())
+: TwObject(nullptr)
+, m_eventLoop(new TwMessageLoop())
+, m_windowManager(new TwWindowManager(this))
+, m_imagingFactory(nullptr)
 {
     g_TWGLOBAL_TwApp = this;
+
+    TwPainter::initRenderSys();
+
+    m_imagingFactory.reset(new TwWICImagingFactory());
+    m_rendererResourceProvider.reset(new TwRendererResourceProvider());
 }
 
 TwApp::~TwApp()
 {
-
+    m_eventLoop.reset(nullptr);
+    m_imagingFactory.reset();
+    m_rendererResourceProvider.reset();
+    TwPainter::unitRenderSys();
+    g_TWGLOBAL_TwApp = nullptr;
 }
 
 int TwApp::run()
 {
-    TwEventLoop eventLoop;
-    int ret = eventLoop.run();
-
-    delete m_appDriver;
-    m_appDriver = NULL;
+    int ret = m_eventLoop->run();
     return ret;
 }
 
 void TwApp::quit()
 {
-    PostQuitMessage(0);
-}
-
-void TwApp::onIdle()
-{
+    onAboutQuit();
+    m_eventLoop->quit(0);
 }
 
 void TwApp::onAboutQuit()
@@ -57,32 +61,19 @@ std::vector<std::wstring> TwApp::cmdArgs()
     return argV;
 }
 
-bool TwApp::registerInterEventId( int id )
+TwWindowManager* TwApp::windowManager() const
 {
-    if (id < TwE::EventIdBegin || id > TwE::EventIdEnd)
-    {
-        return false;
-    }
-    return m_appDriver->registerAppEventId(id);
+    return m_windowManager.get();
 }
 
-bool TwApp::registerAppEventId( int id )
+TwWICImagingFactory* TwApp::imagingFactory() const
 {
-    if (id < TwE::AppEventIdBegin || id > TwE::AppEventIdEnd)
-    {
-        return false;
-    }
-    return m_appDriver->registerAppEventId(id);
+    return m_imagingFactory.get();
 }
 
-void TwApp::postAppEvent( int id )
+TwRendererResourceProvider* TwApp::rendererResourceProvider() const
 {
-    m_appDriver->postAppEvent(id);
-}   
-
-void TwApp::appendAysncTask( IAsyncTask* task)
-{
-    twAsyncTaskService()->appendTask(task);
+    return m_rendererResourceProvider.get();
 }
 
 

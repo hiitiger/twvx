@@ -1,10 +1,9 @@
 
 TEMPLATE = subdirs
-TARGET = 
 DEPENDPATH += .
 INCLUDEPATH += .
 
 SUBDIRS += twgui
-SUBDIRS += twcxx
+SUBDIRS += twbase
 SUBDIRS += uidemo
 SUBDIRS += twimg
