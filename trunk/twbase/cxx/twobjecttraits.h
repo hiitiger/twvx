@@ -3,7 +3,7 @@
 template<class T>
 struct TwObjectDetect
 {
-    template<typename A> static char check(decltype(A::classInfo)  )
+    template<typename A> static char check(decltype(&A::classInfo)  )
     {
         std::cout<<"TwObjectDetect::exist classInfo"<<std::endl;
         return 'y';
