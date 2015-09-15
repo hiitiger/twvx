@@ -19,8 +19,9 @@ unsigned int __stdcall assertThread(void* a)
 {
     DebugAssertData* d = (DebugAssertData*)a;
     int reportMode = _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);
-    _CrtSetReportMode(_CRT_ERROR, reportMode);
     int ret = _CrtDbgReport(_CRT_ERROR, d->file, d->line, d->func, d->msg);
+    _CrtSetReportMode(_CRT_ERROR, reportMode);
+
     if (ret == 1)
     {
         d->doBreak = true;
@@ -41,7 +42,7 @@ bool twAssert( bool cond, const char* file, const char* func, int line, const ch
     HANDLE handle =  (HANDLE)_beginthreadex(nullptr, 0, assertThread, (void*)&d, 0, nullptr);
 
     WaitForSingleObject(handle, INFINITE);
-
+    CloseHandle(handle);
     if (d.doBreak)
     {
         DebugBreak();
