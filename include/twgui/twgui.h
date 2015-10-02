@@ -1,4 +1,10 @@
 #pragma once
+
+#include <d2d1.h>
+//#include <d2d1_1.h>
+#include <Dwrite.h>
+#include <wincodec.h>
+
 #include "../twgui/core/twuinamespace.h"
 #include "../twgui/core/twapp.h"
 #include "../twgui/event/twevent.h"
