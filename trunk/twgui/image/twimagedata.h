@@ -1,5 +1,4 @@
 #pragma once
-#include <wincodec.h>
 
 class TW_GUI_API WindowsImageData : public TwRefObject<TwRefBase>
 {

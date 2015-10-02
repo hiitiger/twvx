@@ -2,6 +2,10 @@
 #pragma once
 
 #include <Windows.h>
+#include <d2d1.h>
+//#include <d2d1_1.h>
+#include <Dwrite.h>
+#include <wincodec.h>
 
 #include "twglobal.h"
 #include "twbase.h"
