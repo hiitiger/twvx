@@ -2,6 +2,7 @@
 TEMPLATE = lib
 DEPENDPATH += .
 DEFINES += TW_DLL_GUI
+CONFIG += staticlib
 
 include(../config/common.pri)
 

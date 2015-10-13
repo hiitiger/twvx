@@ -1,21 +1,19 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twgui", "twgui\twgui.vcxproj", "{2C5702AF-9A49-31BF-AA06-A8374221A98C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twgui", "E:/tigerworks/twvx/twgui\twgui.vcxproj", "{1361B0B6-DEED-3BD1-842A-D6471EA74D5B}"
 	ProjectSection(ProjectDependencies) = postProject
-		{F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44} = {F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44}
+		{2A5484DB-9E49-390B-9044-E83337C51EE4} = {2A5484DB-9E49-390B-9044-E83337C51EE4}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twbase", "twbase\twbase.vcxproj", "{F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twbase", "E:/tigerworks/twvx/twbase\twbase.vcxproj", "{2A5484DB-9E49-390B-9044-E83337C51EE4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uidemo", "uidemo\uidemo.vcxproj", "{44BE30D4-B9C6-3D41-B52D-B2708E66925B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "uidemo", "E:/tigerworks/twvx/uidemo\uidemo.vcxproj", "{0A119AAD-D143-38F9-A898-F533B7D9B88A}"
 	ProjectSection(ProjectDependencies) = postProject
-		{F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44} = {F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44}
-		{2C5702AF-9A49-31BF-AA06-A8374221A98C} = {2C5702AF-9A49-31BF-AA06-A8374221A98C}
+		{2A5484DB-9E49-390B-9044-E83337C51EE4} = {2A5484DB-9E49-390B-9044-E83337C51EE4}
+		{1361B0B6-DEED-3BD1-842A-D6471EA74D5B} = {1361B0B6-DEED-3BD1-842A-D6471EA74D5B}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twimg", "twimg\twimg.vcxproj", "{D24F70BF-599D-3F3F-8589-F7A98176BFB9}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "twimg", "E:/tigerworks/twvx/twimg\twimg.vcxproj", "{FF6CA3CE-4B36-3316-B724-83828655CACE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,24 +21,25 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2C5702AF-9A49-31BF-AA06-A8374221A98C}.Debug|Win32.ActiveCfg = Debug|Win32
-		{2C5702AF-9A49-31BF-AA06-A8374221A98C}.Debug|Win32.Build.0 = Debug|Win32
-		{2C5702AF-9A49-31BF-AA06-A8374221A98C}.Release|Win32.ActiveCfg = Release|Win32
-		{2C5702AF-9A49-31BF-AA06-A8374221A98C}.Release|Win32.Build.0 = Release|Win32
-		{F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44}.Debug|Win32.ActiveCfg = Debug|Win32
-		{F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44}.Debug|Win32.Build.0 = Debug|Win32
-		{F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44}.Release|Win32.ActiveCfg = Release|Win32
-		{F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44}.Release|Win32.Build.0 = Release|Win32
-		{44BE30D4-B9C6-3D41-B52D-B2708E66925B}.Debug|Win32.ActiveCfg = Debug|Win32
-		{44BE30D4-B9C6-3D41-B52D-B2708E66925B}.Debug|Win32.Build.0 = Debug|Win32
-		{44BE30D4-B9C6-3D41-B52D-B2708E66925B}.Release|Win32.ActiveCfg = Release|Win32
-		{44BE30D4-B9C6-3D41-B52D-B2708E66925B}.Release|Win32.Build.0 = Release|Win32
-		{D24F70BF-599D-3F3F-8589-F7A98176BFB9}.Debug|Win32.ActiveCfg = Debug|Win32
-		{D24F70BF-599D-3F3F-8589-F7A98176BFB9}.Debug|Win32.Build.0 = Debug|Win32
-		{D24F70BF-599D-3F3F-8589-F7A98176BFB9}.Release|Win32.ActiveCfg = Release|Win32
-		{D24F70BF-599D-3F3F-8589-F7A98176BFB9}.Release|Win32.Build.0 = Release|Win32
+		{1361B0B6-DEED-3BD1-842A-D6471EA74D5B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1361B0B6-DEED-3BD1-842A-D6471EA74D5B}.Debug|Win32.Build.0 = Debug|Win32
+		{1361B0B6-DEED-3BD1-842A-D6471EA74D5B}.Release|Win32.ActiveCfg = Release|Win32
+		{1361B0B6-DEED-3BD1-842A-D6471EA74D5B}.Release|Win32.Build.0 = Release|Win32
+		{2A5484DB-9E49-390B-9044-E83337C51EE4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2A5484DB-9E49-390B-9044-E83337C51EE4}.Debug|Win32.Build.0 = Debug|Win32
+		{2A5484DB-9E49-390B-9044-E83337C51EE4}.Release|Win32.ActiveCfg = Release|Win32
+		{2A5484DB-9E49-390B-9044-E83337C51EE4}.Release|Win32.Build.0 = Release|Win32
+		{0A119AAD-D143-38F9-A898-F533B7D9B88A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0A119AAD-D143-38F9-A898-F533B7D9B88A}.Debug|Win32.Build.0 = Debug|Win32
+		{0A119AAD-D143-38F9-A898-F533B7D9B88A}.Release|Win32.ActiveCfg = Release|Win32
+		{0A119AAD-D143-38F9-A898-F533B7D9B88A}.Release|Win32.Build.0 = Release|Win32
+		{FF6CA3CE-4B36-3316-B724-83828655CACE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FF6CA3CE-4B36-3316-B724-83828655CACE}.Debug|Win32.Build.0 = Debug|Win32
+		{FF6CA3CE-4B36-3316-B724-83828655CACE}.Release|Win32.ActiveCfg = Release|Win32
+		{FF6CA3CE-4B36-3316-B724-83828655CACE}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
 	EndGlobalSection
 EndGlobal

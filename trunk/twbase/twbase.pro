@@ -3,6 +3,9 @@ TEMPLATE = lib
 DEPENDPATH += .
 DEFINES += TW_DLL_BASE
 
+CONFIG += staticlib
+
+
 include(../config/common.pri)
 
 
