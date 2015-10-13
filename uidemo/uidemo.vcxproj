@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{44BE30D4-B9C6-3D41-B52D-B2708E66925B}</ProjectGuid>
+    <ProjectGuid>{0A119AAD-D143-38F9-A898-F533B7D9B88A}</ProjectGuid>
     <RootNamespace>uidemo</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
@@ -56,8 +56,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>&quot;.&quot;;&quot;..\include&quot;;&quot;..\include\twbase&quot;;&quot;..\include\twgui&quot;;..\..\..\Qt\Qt5.3.0\5.3\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;.;..\include;..\include\twbase;..\include\twgui;D:\Qt\5.5.1\5.5\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>..\objdir\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -68,7 +68,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stable.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\uidemo.pch</PrecompiledHeaderOutputFile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_BASE_STATIC;TW_GUI_STATIC;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName></ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -96,13 +96,13 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_BASE_STATIC;TW_GUI_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>&quot;.&quot;;&quot;..\include&quot;;&quot;..\include\twbase&quot;;&quot;..\include\twgui&quot;;..\..\..\Qt\Qt5.3.0\5.3\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;.;..\include;..\include\twbase;..\include\twgui;D:\Qt\5.5.1\5.5\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>..\objdir\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -113,7 +113,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stable.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\uidemo.pch</PrecompiledHeaderOutputFile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_BASE_STATIC;TW_GUI_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -139,7 +139,7 @@
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_BASE_STATIC;TW_GUI_STATIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>

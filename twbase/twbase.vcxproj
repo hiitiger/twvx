@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F34BAA49-FC20-3C1D-A9B6-1B9E72AF4E44}</ProjectGuid>
+    <ProjectGuid>{2A5484DB-9E49-390B-9044-E83337C51EE4}</ProjectGuid>
     <RootNamespace>twbase</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <OutputDirectory>..\bin\$(Configuration)\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <IntermediateDirectory>..\objdir\$(ProjectName)\$(Configuration)\</IntermediateDirectory>
     <PrimaryOutput>twbase</PrimaryOutput>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <OutputDirectory>..\bin\$(Configuration)\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <IntermediateDirectory>..\objdir\$(ProjectName)\$(Configuration)\</IntermediateDirectory>
     <PrimaryOutput>twbase</PrimaryOutput>
   </PropertyGroup>
@@ -48,7 +48,6 @@
     <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">..\objdir\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">twbase</TargetName>
     <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</IgnoreImportLibrary>
-    <LinkIncremental Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">false</LinkIncremental>
     <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">..\bin\$(Configuration)\</OutDir>
     <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">..\objdir\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">twbase</TargetName>
@@ -56,8 +55,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>&quot;.&quot;;&quot;..\include&quot;;&quot;..\include\twbase&quot;;&quot;..\include\twgui&quot;;..\..\..\Qt\Qt5.3.0\5.3\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;.;..\include;..\include\twbase;..\include\twgui;D:\Qt\5.5.1\5.5\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>..\objdir\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -68,7 +67,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stable.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\twbase.pch</PrecompiledHeaderOutputFile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_BASE;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_BASE;TW_BASE_STATIC;TW_GUI_STATIC;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <ProgramDataBaseFileName></ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -77,30 +76,23 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>..\lib\$(Configuration);..\bin\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DataExecutionPrevention>true</DataExecutionPrevention>
-      <GenerateDebugInformation>false</GenerateDebugInformation>
-      <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <LinkDLL>true</LinkDLL>
-      <LinkIncremental>false</LinkIncremental>
-      <OutputFile>$(OutDir)\twbase.dll</OutputFile>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+    <Lib>
+      <OutputFile>$(OutDir)\twbase.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Link>
+    </Lib>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>
       <EnableErrorChecks>None</EnableErrorChecks>
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_BASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_BASE;TW_BASE_STATIC;TW_GUI_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>&quot;.&quot;;&quot;..\include&quot;;&quot;..\include\twbase&quot;;&quot;..\include\twgui&quot;;..\..\..\Qt\Qt5.3.0\5.3\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.;.;..\include;..\include\twbase;..\include\twgui;D:\Qt\5.5.1\5.5\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>..\objdir\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -111,7 +103,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stable.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\twbase.pch</PrecompiledHeaderOutputFile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_BASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_BASE;TW_BASE_STATIC;TW_GUI_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -119,29 +111,24 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>..\lib\$(Configuration);..\bin\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DataExecutionPrevention>true</DataExecutionPrevention>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreImportLibrary>true</IgnoreImportLibrary>
-      <LinkDLL>true</LinkDLL>
-      <OutputFile>$(OutDir)\twbase.dll</OutputFile>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
+    <Lib>
+      <OutputFile>$(OutDir)\twbase.lib</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Link>
+    </Lib>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>
       <EnableErrorChecks>None</EnableErrorChecks>
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_BASE;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_BASE;TW_BASE_STATIC;TW_GUI_STATIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="thread\Twsync.cpp" />
     <ClCompile Include="log\debugconsole.cpp" />
     <ClCompile Include="native\simplewindowbase.cpp" />
+    <ClCompile Include="tool\textstream.cpp" />
     <ClCompile Include="log\twassert.cpp" />
     <ClCompile Include="core\twbaseservice.cpp" />
     <ClCompile Include="graphics\twcolor.cpp" />
@@ -176,6 +163,7 @@
       <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">Generating precompiled header source file &apos;stable.h.cpp&apos; ...</Message>
       <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">stable.h.cpp;%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="tool\textstream.h" />
     <ClInclude Include="log\twassert.h" />
     <ClInclude Include="signal\twasyncsignal.h" />
     <ClInclude Include="config\twbaseconfig.h" />

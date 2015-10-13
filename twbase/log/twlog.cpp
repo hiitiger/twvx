@@ -1,222 +1,179 @@
 #include "stable.h"
-#include <iostream>
 #include "twlog.h"
-#include "debugconsole.h"
-#include "twbasic.h"
-
-char* wcharStringToCharString(const wchar_t* content,int length)
-{
-    if(content == nullptr)
-    {
-        return nullptr;
-    }
-
-    if (length < 0 && length != -1)
-    {
-        return nullptr;
-    }
-
-    int c = WideCharToMultiByte(CP_ACP,0,content,length,0,0,0,0);
-    if(c == 0)
-    {
-        return nullptr;
-    }
-
-    char *ao = new char[c+1];
-    memset(ao,0,c+1);
-    c = WideCharToMultiByte(CP_ACP,0,content,length,ao,c,0,0);
-    if (c == 0)
-    {
-        delete [] ao;
-        return "";
-    }
-
-    ao[c] = '\0';
-    return ao;
-}
-
-std::string wstringTostring(const std::wstring& str)
-{
-    std::string retStr;
-
-    char* res = wcharStringToCharString(str.c_str(), str.length());
-    if (res)
-    {
-        retStr.assign(res, strlen(res)+1);
-        delete [] res;
-    }
-
-    return retStr;
-}
+#include <process.h>
+#include <time.h>
 
 
-class LogFile
+const int k_MAXLOGFILESIZE = 32 * 1024 * 1024;
+
+class TwLog
 {
 public:
-    LogFile() {;}
-    ~LogFile() {;}
-
-    void log(const std::string& data, int type)
+    struct LogItem
     {
-        //TODO:
-    }
-    
-    static LogFile* sLog;
-};
-
-LogFile* LogFile::sLog = nullptr;
-
-_log_hook Log_hook = nullptr;
-bool Log_useDCLog = false;
-
-void doLog(const std::string& d, int type)
-{
-#ifdef _DEBUG
-    if (Log_useDCLog)
-    {
-        if (type == TTwLog_DebugConsole)
+        LogItem()
         {
-            std::cout<<d<<std::endl;
+            memset(mod, 0, sizeof(char) * 64);
+            memset(file, 0, sizeof(char) * 128);
+            memset(function, 0, sizeof(char) * 128);
+        }
+        char mod[64];
+        char file[128];
+        char function[128];
+        unsigned int line;
+        //__time64_t timet;
+        SYSTEMTIME timet;
+        std::wstring data;
+    };
+
+
+    DWORD m_threadId;
+    std::wstring m_fileName;
+    HANDLE m_writeEvent;
+    HANDLE m_thread;
+    TwLock m_logLock;
+    std::deque<LogItem*> m_logItems;
+
+    TwLog()
+        : m_threadId(0)
+        , m_writeEvent(NULL)
+        , m_thread(NULL)
+    {
+
+        m_fileName = TwUtils::appDataPath();
+        m_fileName.append(L"\\max\\log");
+        TwUtils::makeSureDirExist(m_fileName);
+
+        WCHAR exePath[MAX_PATH];
+        GetModuleFileNameW(NULL, exePath, MAX_PATH);
+        WCHAR* name = wcsrchr(exePath, '\\');
+
+        m_fileName.append(name);
+        m_fileName.erase(m_fileName.find_last_of('.'));
+        m_fileName.append(L".log");
+
+        m_writeEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
+        start();
+    }
+    ~TwLog()
+    {
+        ::PostThreadMessageW(m_threadId, WM_USER + 0X101, 0, 0);
+        if (WAIT_TIMEOUT == WaitForSingleObject(m_thread, 5000))
+        {
+            TerminateThread(m_thread, -1);
+        }
+        CloseHandle(m_writeEvent);
+        CloseHandle(m_thread);
+    }
+
+    static TwLog*instance()
+    {
+        static TwLog logInstance;
+        return &logInstance;
+    }
+
+    void start()
+    {
+        m_thread = (HANDLE)_beginthreadex(NULL, 0, logThread, (void*)this, 0, (unsigned int*)&m_threadId);
+
+        addLog(MOD_QXCORE, __FILE__, __FUNCTION__, __LINE__, L"Start...");
+    }
+
+    void addLog(const char* mod, const char* file, const char* function, unsigned int line, const std::wstring& data)
+    {
+        LogItem* item = new LogItem;
+        _snprintf_s(item->mod, _TRUNCATE, mod);
+        _snprintf_s(item->file, _TRUNCATE, file);
+        _snprintf_s(item->function, _TRUNCATE, function);
+        item->line = line;
+        GetLocalTime(&item->timet);
+        item->data = data;
+        TwScopeLovkV1 lock(&m_logLock);
+        m_logItems.push_back(item);
+        SetEvent(m_writeEvent);
+    }
+
+private:
+    void _writeLog(TwFile& logFile)
+    {
+        std::deque<LogItem*> logItems;
+        {
+            TwScopeLovkV1 lock(&m_logLock);
+            logItems.swap(m_logItems);
+        }
+
+        if (logFile.size() > k_MAXLOGFILESIZE)
+        {
+            logFile.setSize(0);
+        }
+
+        for (std::deque<LogItem*>::iterator it = logItems.begin(); it != logItems.end(); ++it)
+        {
+            LogItem* item = *it;
+
+            char timesz[128] = { 0 };
+            sprintf_s(timesz, "%d-%d-%d %d:%d:%d:%d ", item->timet.wYear, item->timet.wMonth, item->timet.wDay, item->timet.wHour, item->timet.wMinute, item->timet.wSecond, item->timet.wMilliseconds);
+            logFile.write(timesz, strlen(timesz));
+
+            int logSize = item->data.size();
+            char* log = (char*)malloc(sizeof(char) * 320 + logSize + 1);
+            memset(log, 0, sizeof(char) * 320 + logSize + 1);
+            int writeSize = sprintf_s(log, sizeof(char) * 256 + 32 + logSize + 1, "mod:%s,file:%s,function:%s,line:%d,log:%s\r\n", item->mod, item->file, item->function, item->line, TwUtils::toUtf8(item->data.c_str(), item->data.size()).c_str());
+            logFile.write(log, writeSize);
+            free(log);
+
+            delete item;
         }
     }
-    else
-#endif
+
+    static  unsigned int __stdcall logThread(void* p)
     {
-        LogFile::sLog->log(d, type);
+        ((TwLog*)p)->_logThread();
+        return 0;
     }
-}
 
-void TwLog::initLog( bool useDCLog /*= true*/, _log_hook hookfn/*= nullptr*/ )
-{
-    Log_useDCLog = useDCLog;
-#ifdef _DEBUG
-    if (Log_useDCLog)
+    void _logThread()
     {
-        DebugConsole::getConsole();
+        TwFile logFile(m_fileName.c_str());
+        logFile.open(TwFile::ReadWrite|TwFile::Append);
+
+        while (true)
+        {
+            DWORD wait = MsgWaitForMultipleObjects(1, &m_writeEvent, FALSE, 5000, QS_ALLINPUT);
+            if (wait == WAIT_OBJECT_0 || wait == WAIT_TIMEOUT)
+            {
+                _writeLog(logFile);
+            }
+            else if(wait == WAIT_OBJECT_0 + 1)
+            {
+                MSG msg;
+                while (GetMessageW(&msg, NULL, 0, 0))
+                {
+                    if (msg.message == WM_USER + 0X101)
+                    {
+                        _writeLog(logFile);
+                        SYSTEMTIME timet;
+                        ::GetLocalTime(&timet);
+                        char timesz[128] = { 0 };
+                        sprintf_s(timesz, "%d-%d-%d %d:%d:%d:%d End...", timet.wYear, timet.wMonth, timet.wDay, timet.wHour, timet.wMinute, timet.wSecond, timet.wMilliseconds);
+                        logFile.write(timesz, strlen(timesz));
+                        break;
+                    }
+
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
+            }
+            else
+            {
+                break;
+            }
+        }     
     }
-#endif
-    Log_hook = hookfn;
-    LogFile::sLog = new LogFile;
-}
+};
 
-void TwLog::uninitLog()
+
+LogStream::~LogStream()
 {
-    delete LogFile::sLog;
-    LogFile::sLog = nullptr;
-}
-
-
-TwLog::TwLog( const char* filter, int type, const char* file, const char* func, int line )
-    : m_type(type)
-{
-    m_logData<<"filter: "<<filter<<" type: "<<type<<" file: "<<file<<" func: "<<func<<" line: "<<line<<" Log: ";
-}
-
-TwLog::~TwLog()
-{
-    doLog(m_logData.str(), m_type);
-}
-
-TwLog& TwLog::operator<<( bool d )
-{
-    m_logData<<( d ? "true" : "false");
-    return *this;
-}
-
-TwLog& TwLog::operator<<( char d )
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( short d )
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( unsigned short d )
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( float d )
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( double d )
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( int d)
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<(unsigned int d)
-{
-    m_logData << d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<(long d)
-{
-    m_logData << d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<(unsigned long d)
-{
-    m_logData << d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( int64 d)
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( uint64 d)
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( const wchar_t* d )
-{
-    std::string str = wstringTostring(d);
-    m_logData<<str;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( const std::wstring& d)
-{
-    std::string str = wstringTostring(d);
-    m_logData<<str;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( const char* d )
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( const std::string& d )
-{
-    m_logData<<d;
-    return *this;
-}
-
-TwLog& TwLog::operator<<( void* d )
-{
-    m_logData<<(int)d;
-    return *this;
+    TwLog::instance()->addLog(m_mod, m_file, m_function, m_line, m_stream.data());
 }

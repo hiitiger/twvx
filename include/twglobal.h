@@ -1,15 +1,24 @@
 #pragma once
 
-#ifdef TW_DLL_GUI
-#define TW_GUI_API __declspec( dllexport )
+
+#ifdef TW_BASE_STATIC
+    #define  TW_BASE_API 
 #else
-#define  TW_GUI_API __declspec( dllimport )
+    #ifdef TW_DLL_BASE
+        #define TW_BASE_API __declspec( dllexport )
+    #else
+        #define  TW_BASE_API __declspec( dllimport )
+    #endif
 #endif
 
-#ifdef TW_DLL_BASE
-#define TW_BASE_API __declspec( dllexport )
+#ifdef TW_GUI_STATIC
+    #define  TW_GUI_API 
 #else
-#define  TW_BASE_API __declspec( dllimport )
+	#ifdef TW_DLL_GUI
+		#define TW_GUI_API __declspec( dllexport )
+	#else
+		#define  TW_GUI_API __declspec( dllimport )
+	#endif
 #endif
 
 #define  TW_UNUSED(XXX) (XXX);

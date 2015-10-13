@@ -15,3 +15,6 @@ QMAKE_LIBDIR += ../bin/$(Configuration)
 
 DESTDIR = ../bin/$(Configuration)
 OBJECTS_DIR = ../objdir/$(ProjectName)/$(Configuration)
+
+DEFINES += TW_BASE_STATIC
+DEFINES += TW_GUI_STATIC
