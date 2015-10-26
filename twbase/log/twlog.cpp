@@ -41,7 +41,7 @@ public:
     {
 
         m_fileName = TwUtils::appDataPath();
-        m_fileName.append(L"\\max\\log");
+        m_fileName.append(L"\\twvx\\");
         TwUtils::makeSureDirExist(m_fileName);
 
         WCHAR exePath[MAX_PATH];
@@ -76,7 +76,6 @@ public:
     {
         m_thread = (HANDLE)_beginthreadex(NULL, 0, logThread, (void*)this, 0, (unsigned int*)&m_threadId);
 
-        addLog(MOD_QXCORE, __FILE__, __FUNCTION__, __LINE__, L"Start...");
     }
 
     void addLog(const char* mod, const char* file, const char* function, unsigned int line, const std::wstring& data)
@@ -115,10 +114,10 @@ private:
             sprintf_s(timesz, "%d-%d-%d %d:%d:%d:%d ", item->timet.wYear, item->timet.wMonth, item->timet.wDay, item->timet.wHour, item->timet.wMinute, item->timet.wSecond, item->timet.wMilliseconds);
             logFile.write(timesz, strlen(timesz));
 
-            int logSize = item->data.size();
+            size_t logSize = item->data.size();
             char* log = (char*)malloc(sizeof(char) * 320 + logSize + 1);
             memset(log, 0, sizeof(char) * 320 + logSize + 1);
-            int writeSize = sprintf_s(log, sizeof(char) * 256 + 32 + logSize + 1, "mod:%s,file:%s,function:%s,line:%d,log:%s\r\n", item->mod, item->file, item->function, item->line, TwUtils::toUtf8(item->data.c_str(), item->data.size()).c_str());
+            int writeSize = sprintf_s(log, sizeof(char) * 256 + 32 + logSize + 1, "mod:%s,file:%s,function:%s,line:%d,log:%s\r\n", item->mod, item->file, item->function, item->line, TwUtils::toUtf8(item->data.c_str(), static_cast<int>(item->data.size())).c_str());
             logFile.write(log, writeSize);
             free(log);
 
@@ -137,7 +136,8 @@ private:
         TwFile logFile(m_fileName.c_str());
         logFile.open(TwFile::ReadWrite|TwFile::Append);
 
-        while (true)
+        bool running = true;
+        while (running)
         {
             DWORD wait = MsgWaitForMultipleObjects(1, &m_writeEvent, FALSE, 5000, QS_ALLINPUT);
             if (wait == WAIT_OBJECT_0 || wait == WAIT_TIMEOUT)
@@ -157,6 +157,8 @@ private:
                         char timesz[128] = { 0 };
                         sprintf_s(timesz, "%d-%d-%d %d:%d:%d:%d End...", timet.wYear, timet.wMonth, timet.wDay, timet.wHour, timet.wMinute, timet.wSecond, timet.wMilliseconds);
                         logFile.write(timesz, strlen(timesz));
+
+                        running = false;
                         break;
                     }
 

@@ -17,6 +17,8 @@
 #include "../twbase/cxx/twcxxdefine.h"
 #include "../twbase/cxx/twfunc.h"
 #include "../twbase/signal/twsignal.h"
+#include "../twbase/signal/Delegate.h"
+#include "../twbase/signal/Signal.h"
 
 #include "../twbase/cxx/twrefbase.h"
 #include "../twbase/cxx/twscoped_ptr.h"
@@ -37,5 +39,7 @@
 #include "../twbase/graphics/twmatrix.h"
 #include "../twbase/graphics/twtransform.h"
 
-#include "../twbase/tool/twfilestream.h"
+#include "../twbase/tool/twutils.h"
 #include "../twbase/tool/twfile.h"
+#include "../twbase/tool/textstream.h"
+#include "../twbase/log/twlog.h"

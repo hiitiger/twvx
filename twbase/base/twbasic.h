@@ -13,13 +13,13 @@
 #include <memory>
 #include <algorithm>
 #include <functional>
-
+#include <iostream>
+#include <sstream>
 
 
 //////////////////////////////////////////////////////////////////////////
 #include "twtype.h"
 #include "twassert.h"
-#include "twlog.h"
 
 #ifdef _DEBUG
 #define  DAssert(e) twAssert((bool)(!!(e)), __FILE__, __FUNCTION__, __LINE__,"")
@@ -29,19 +29,8 @@
 #define  DAssert_M(e, msg)  
 #endif // _DEBUG
 
-#ifdef _DEBUG
-#define  DLog(filter) TwLog(filter, TTwLog_Debug,  __FILE__, __FUNCTION__, __LINE__)
-#define  DCLog(filter) TwLog(filter, TTwLog_DebugConsole,  __FILE__, __FUNCTION__, __LINE__)
-#else
-#define  DLog(filter) TwEmptyLog(filter, TTwLog_Debug,  __FILE__, __FUNCTION__, __LINE__)
-#define  DCLog(filter) TwEmptyLog(filter, TTwLog_DebugConsole,  __FILE__, __FUNCTION__, __LINE__)
-#endif // _DEBUG
-
-#define  TempLog DCLog(TwXXXLog) 
-#define  ReleaseLog(filter) TwLog(filter, TTwLog_Release,  __FILE__, __FUNCTION__, __LINE__)
-
-#define  TraceLog 
-
+#define BREAK_IF(e)  if(!!(e)) {break;}
+#define BREAK_IFNOT(e) if(!(e)) {break;}
 
 //////////////////////////////////////////////////////////////////////////
 inline int twRound(double d)

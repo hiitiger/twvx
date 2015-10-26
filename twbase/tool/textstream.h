@@ -1,7 +1,7 @@
 #pragma once
 
 
-class QX_BASE_API TextStream
+class TW_BASE_API TextStream
 {
 public:
     TextStream()
@@ -61,7 +61,7 @@ public:
     TextStream& operator<<(const wchar_t* d){ m_data.append(d);return *this; }
     TextStream& operator<<(const std::wstring& d) { m_data.append(d);return *this; }
     TextStream& operator<<(const char* d){return (*this) << TwUtils::fromLocal8Bit(d);}
-    TextStream& operator<<(const std::string& d) { return (*this) << TwUtils::fromLocal8Bit(d.c_str(), d.size());}
+    TextStream& operator<<(const std::string& d) { return (*this) << TwUtils::fromLocal8Bit(d.c_str(), static_cast<int>(d.size()));}
 
     TextStream& operator<<(const void* d)
     {

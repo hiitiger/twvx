@@ -830,7 +830,7 @@ bool TwNativeWindow::onMButtonUp(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESUL
 bool TwNativeWindow::onMouseCaputureChanged( UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& res )
 {
     TW_UNUSED(uMsg);TW_UNUSED(wParam);TW_UNUSED(lParam);TW_UNUSED(res);
-    if (m_isDragging)
+    if ((HWND)lParam != m_hwnd)
     {
         m_isDragging = false;
         m_pressedButton = Tw::MB_NoButton;

@@ -1,6 +1,6 @@
 #pragma once
 
-class QX_BASE_API LogStream
+class TW_BASE_API LogStream
 {
 public:
     LogStream(const char* mod, const char* file, const char* function, unsigned int line)
@@ -38,3 +38,10 @@ private:
     const char* m_function;
     unsigned int m_line;
 };
+
+
+
+#define  TempLog  LogStream(0, __FILE__, __FUNCTION__, __LINE__)
+#define  ReleaseLog(filter) LogStream(filter, __FILE__, __FUNCTION__, __LINE__)
+
+#define  TraceLog 

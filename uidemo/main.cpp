@@ -4,7 +4,6 @@
 INT WINAPI WinMain( __in HINSTANCE , __in_opt HINSTANCE , __in_opt LPSTR , __in int  )
 {
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
-    TwLog::initLog();
     TwApp app;
 
     TwWindow* w = new TwWindow;
@@ -98,7 +97,6 @@ INT WINAPI WinMain( __in HINSTANCE , __in_opt HINSTANCE , __in_opt LPSTR , __in 
 //    TwTestsR::get()->run();
 
     app.run();
-    TwLog::uninitLog();
 
     return 0;
 }
