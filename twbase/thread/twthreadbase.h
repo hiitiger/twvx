@@ -10,7 +10,7 @@ public:
     //wait until thread start or fail.
     bool start();
     //wait until thread stop.
-    void stop();
+    virtual void stop();
 
     uint32 threadId() const { return m_threadId;}
     bool isRunning() const { return m_threadHandle != nullptr;}

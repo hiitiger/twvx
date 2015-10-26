@@ -84,7 +84,7 @@ struct TW_BASE_API TwLockBase
     TW_NONCOPY(TwLockBase);
 public:
     TwLockBase(){;}
-    ~TwLockBase(){;}
+    virtual ~TwLockBase(){;}
     virtual int lock() = 0;
     virtual int unlock() = 0;
 };
