@@ -134,29 +134,23 @@ struct WrString
  
      void func1( WrString& msg)
      {
-         DCLog(TwXXXLog);
+
          std::cout<<msg.str<<std::endl;
      }
      void func2(const WrString& msg, int*p)
      {
-         DCLog(TwXXXLog);
- 
          std::cout<<msg.str<<std::endl;
          std::cout<<*p<<std::endl;
          delete p;
      }
      void func3(const WrString& msg, int a, int b)
      {
-         DCLog(TwXXXLog);
- 
          std::cout<<msg.str<<std::endl;
          std::cout<<a<<std::endl;
          std::cout<<b<<std::endl;
      }
      void func4(const WrString& msg, int a, int b, int c)
      {
-         DCLog(TwXXXLog);
- 
          std::cout<<msg.str<<std::endl;
          std::cout<<a<<std::endl;
          std::cout<<b<<std::endl;
@@ -164,8 +158,6 @@ struct WrString
      }
      void func5(const WrString& msg, int a, int b, int c, int d)
      {
-         DCLog(TwXXXLog);
- 
          std::cout<<msg.str<<std::endl;
          std::cout<<a<<std::endl;
          std::cout<<b<<std::endl;

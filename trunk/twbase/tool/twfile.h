@@ -1,8 +1,8 @@
 #pragma once
 
-class QX_BASE_API TwFile
+class TW_BASE_API TwFile
 {
-    TW_DISABLE_COPY(TwFile)
+    TW_NONCOPY(TwFile)
 public:
     enum OpenMode {
         ReadOnly = 0x0001,
