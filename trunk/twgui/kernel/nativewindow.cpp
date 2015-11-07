@@ -403,7 +403,6 @@ bool TwNativeWindow::onShowWindow( UINT uMsg, WPARAM wParam, LPARAM lParam , LRE
 
     //Native WM_Show msg does not cause show or hide TwEvent dispatch.
     //DCLog(TwXXXLog)<<"onShowWindow : "<<(uMsg ? "Show" : "hide");
-    //ReleaseLog(TwXXXLog)<<"onShowWindow : "<<(uMsg ? "Show" : "hide");
     return false;
 }
 

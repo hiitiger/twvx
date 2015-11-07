@@ -41,7 +41,6 @@ private:
 
 
 
-#define  TempLog  LogStream(0, __FILE__, __FUNCTION__, __LINE__)
-#define  ReleaseLog(filter) LogStream(filter, __FILE__, __FUNCTION__, __LINE__)
+#define  TempLog  LogStream("tmp", __FILE__, __FUNCTION__, __LINE__)
 
-#define  TraceLog 
+#define TWLOG(mod)  LogStream(mod, __FILE__, __FUNCTION__, __LINE__)

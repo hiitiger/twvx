@@ -50,3 +50,4 @@ SOURCES += $$files(tool/*.cpp)
 
 HEADERS += $$files(tinyipc/*.h)
 SOURCES += $$files(tinyipc/*.cpp)
+
