@@ -66,6 +66,6 @@ public:
     std::map<int, IIpcClient*> m_clients;
     Status m_status;
 
-    std::deque<std::unique_ptr<COPYDATASTRUCT>> m_pendingOutQueue;
+    std::deque<std::string> m_pendingOutQueue;
 };
 
