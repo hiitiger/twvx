@@ -8,6 +8,7 @@ INT WINAPI WinMain( __in HINSTANCE , __in_opt HINSTANCE , __in_opt LPSTR , __in 
 
     TwWindow* w = new TwWindow;
     w->setWindowAttribute(Tw::WA_DeleteOnWindowDestroyed, true);
+    w->setMaxSize(1800, 900);
 
     TwLabel* label = new TwLabel();
     label->setText(L"See you!");
@@ -88,13 +89,17 @@ INT WINAPI WinMain( __in HINSTANCE , __in_opt HINSTANCE , __in_opt LPSTR , __in 
         return true;
     });
 
-//     for (int i = 0; i < 5000; ++i)
-//     {
-//         TwTextButton* cc = new TwTextButton();
-//         cc->setText(L"Hello Button");
-//         label->addWidget(cc);
-//     }
-//    TwTestsR::get()->run();
+     for (int i = 0; i < 5000; ++i)
+     {
+         TwTextButton* cc = new TwTextButton();
+         cc->setText(L"Hello Button");
+         cc->setWidth(100);
+         cc->setHeight(30);
+         cc->setPos(i * 150 % 1600, i);
+       
+         button->addWidget(cc);
+     }
+    TwTestsR::get()->run();
 
     app.run();
 
