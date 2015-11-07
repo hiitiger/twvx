@@ -17,24 +17,20 @@ IpcLink::~IpcLink(void)
 
 bool IpcLink::sendMessage(const std::string& data)
 {
-    COPYDATASTRUCT* copydatast = new COPYDATASTRUCT;
-    memset(copydatast, 0, sizeof(copydatast));
-    std::unique_ptr<COPYDATASTRUCT> copyData(copydatast);
-    copyData->dwData = GetCurrentProcessId();
-    copyData->cbData = (DWORD)data.length();
-    copyData->lpData = (PVOID)data.c_str();
+    COPYDATASTRUCT copydatast;
+    memset(&copydatast, 0, sizeof(copydatast));
+    copydatast.dwData = GetCurrentProcessId();
+    copydatast.cbData = (DWORD)data.length();
+    copydatast.lpData = (PVOID)data.c_str();
+
     if (status() == IIpcLink::Connected)
     {
-        return (0 != ::SendMessage(m_remoteIpcWindow, WM_COPYDATA, NULL, (LPARAM)copyData.get()));
+        return (0 != ::SendMessage(m_remoteIpcWindow, WM_COPYDATA, NULL, (LPARAM)&copydatast));
     }
-    else if (status() == IIpcLink::Connecting)
+    else 
     {
-        m_pendingOutQueue.push_back(std::move(copyData));
+        m_pendingOutQueue.push_back(data);
         return true;
-    }
-    else
-    {
-        return false;
     }
 }
 
@@ -78,7 +74,13 @@ void IpcLink::onConnect()
 
     for (auto it = m_pendingOutQueue.begin(); it != m_pendingOutQueue.end(); it++)
     {
-        ::SendMessage(m_remoteIpcWindow, WM_COPYDATA, NULL, (LPARAM)(*it).get());
+        COPYDATASTRUCT copydatast;
+        memset(&copydatast, 0, sizeof(copydatast));
+        copydatast.dwData = GetCurrentProcessId();
+        copydatast.cbData = (DWORD)it->length();
+        copydatast.lpData = (PVOID)it->c_str();
+
+        ::SendMessage(m_remoteIpcWindow, WM_COPYDATA, NULL, (LPARAM)&copydatast);
     }
     m_pendingOutQueue.clear();
 }
