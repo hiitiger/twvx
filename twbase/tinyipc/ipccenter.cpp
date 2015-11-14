@@ -518,6 +518,7 @@ void IpcHostCenter::uninit()
         if (link->isConnect())
         {
             ::PostMessage(link->remoteWindow(), WM_IPC_CLOSELINK, (WPARAM)process, 0);
+            m_host->onClientClose(link);
             link->onClosed();
         }
     }
