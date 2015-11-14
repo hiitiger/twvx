@@ -23,7 +23,7 @@
 
 #define  TW_UNUSED(XXX) (XXX);
 
-#define TW_NONCOPY(classname) \
+#define TW_DISABLE_COPY(classname) \
     private:\
     classname(const classname &); \
     classname &operator=(const classname &);

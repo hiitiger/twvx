@@ -4,7 +4,7 @@
 template<class C>
 class TwRefObject : public C
 {
-    TW_NONCOPY(TwRefObject);
+    TW_DISABLE_COPY(TwRefObject);
 public:
     TwRefObject()
         :ref_(0)

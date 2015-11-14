@@ -2,7 +2,7 @@
 
 class TwBaseService 
 {
-    TW_NONCOPY(TwBaseService);
+    TW_DISABLE_COPY(TwBaseService);
     friend class TwMessageLoop;
     friend class TimerSink;
 public:

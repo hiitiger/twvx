@@ -130,6 +130,7 @@
     <ClCompile Include="tinyipc\ipccenter.cpp" />
     <ClCompile Include="tinyipc\ipclink.cpp" />
     <ClCompile Include="base\messagepack.cpp" />
+    <ClCompile Include="xml\pugixml.cpp" />
     <ClCompile Include="native\simplewindowbase.cpp" />
     <ClCompile Include="tool\textstream.cpp" />
     <ClCompile Include="tinyipc\tinyipc2.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="core\twobjinfo.cpp" />
     <ClCompile Include="core\twpointer.cpp" />
     <ClCompile Include="tool\twprocess.cpp" />
+    <ClCompile Include="tool\twsettings.cpp" />
     <ClCompile Include="base\twsingleton.cpp" />
     <ClCompile Include="tool\twsysinfo.cpp" />
     <ClCompile Include="thread\twthread.cpp" />
@@ -156,6 +158,7 @@
     <ClCompile Include="graphics\twtransform.cpp" />
     <ClCompile Include="tool\twutils.cpp" />
     <ClCompile Include="cxx\twvar.cpp" />
+    <ClCompile Include="xml\twxmldocument.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="signal\Delegate.h" />
@@ -209,6 +212,7 @@
     <ClInclude Include="cxx\twref.h" />
     <ClInclude Include="cxx\twrefbase.h" />
     <ClInclude Include="cxx\twscoped_ptr.h" />
+    <ClInclude Include="tool\twsettings.h" />
     <ClInclude Include="signal\twsignal.h" />
     <ClInclude Include="signal\twsignalv2.h" />
     <ClInclude Include="base\twsingleton.h" />
@@ -222,6 +226,7 @@
     <ClInclude Include="base\twtype.h" />
     <ClInclude Include="tool\twutils.h" />
     <ClInclude Include="cxx\twvar.h" />
+    <ClInclude Include="xml\twxmldocument.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stable.h.cpp">

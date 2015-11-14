@@ -39,7 +39,10 @@
 #include "../twbase/graphics/twmatrix.h"
 #include "../twbase/graphics/twtransform.h"
 
+#include "../twbase/xml/twxmldocument.h"
+
 #include "../twbase/tool/twutils.h"
 #include "../twbase/tool/twfile.h"
 #include "../twbase/tool/textstream.h"
+#include "../twbase/tool/twsettings.h"
 #include "../twbase/log/twlog.h"

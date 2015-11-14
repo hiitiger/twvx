@@ -14,7 +14,7 @@ class TwBaseService;
 */
 class TW_BASE_API TwMessageLoop
 {
-    TW_NONCOPY(TwMessageLoop);
+    TW_DISABLE_COPY(TwMessageLoop);
     friend class TwBaseService;
     friend struct QuitTask;
 

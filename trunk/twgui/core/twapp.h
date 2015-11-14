@@ -6,7 +6,7 @@ class TwRendererResourceProvider;
 
 class TW_GUI_API TwApp : public TwObject
 {
-    TW_NONCOPY(TwApp);
+    TW_DISABLE_COPY(TwApp);
 public:
     TwApp();
     virtual ~TwApp();

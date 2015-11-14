@@ -2,7 +2,7 @@
 
 class TW_BASE_API TwThreadBase
 {
-    TW_NONCOPY(TwThreadBase);
+    TW_DISABLE_COPY(TwThreadBase);
 public:
     TwThreadBase();
     virtual ~TwThreadBase();
