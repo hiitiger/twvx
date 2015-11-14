@@ -4,7 +4,7 @@
 template< class T >
 class TwScopedPtr
 {
-    TW_NONCOPY(TwScopedPtr);
+    TW_DISABLE_COPY(TwScopedPtr);
 public:
     explicit TwScopedPtr(T* obj = nullptr)
         :obj_(obj)

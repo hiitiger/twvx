@@ -38,11 +38,14 @@
 #include "twmsgloop.h"
 #include "twthread.h"
 
+#include "xml/twxmldocument.h"
+
 #include "tool/twprocess.h"
 #include "tool/twutils.h"
 #include "tool/twfile.h"
 #include "tool/twsysinfo.h"
 #include "tool/textstream.h"
+#include "tool/twsettings.h"
 
 #include "log/twlog.h"
 

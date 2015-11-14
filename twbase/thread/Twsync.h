@@ -81,7 +81,7 @@ private:
 
 struct TW_BASE_API TwLockBase
 {
-    TW_NONCOPY(TwLockBase);
+    TW_DISABLE_COPY(TwLockBase);
 public:
     TwLockBase(){;}
     virtual ~TwLockBase(){;}

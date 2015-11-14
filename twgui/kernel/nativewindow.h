@@ -9,7 +9,7 @@ class TwWindow;
 
 class  TwNativeWindow :  public SimpleWindowBase<TwNativeWindow>
 {
-    TW_NONCOPY(TwNativeWindow)
+    TW_DISABLE_COPY(TwNativeWindow)
 public:
     TwNativeWindow();
     virtual ~ TwNativeWindow();

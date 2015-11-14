@@ -3,7 +3,7 @@
 class TwWindow;
 class TW_GUI_API TwWindowManager : public TwObject
 {
-    TW_NONCOPY(TwWindowManager);
+    TW_DISABLE_COPY(TwWindowManager);
 public:
     explicit TwWindowManager(TwObject* parent = nullptr);
     virtual ~TwWindowManager();

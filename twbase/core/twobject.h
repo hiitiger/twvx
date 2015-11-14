@@ -9,7 +9,7 @@ It supports:
 
 class TW_BASE_API TwObject 
 {
-    TW_NONCOPY(TwObject);
+    TW_DISABLE_COPY(TwObject);
     TW_CLASS_DECLARE(TwObject);
 public:
     explicit TwObject(TwObject* parent = nullptr);

@@ -2,7 +2,7 @@
 
 class TW_BASE_API TwFile
 {
-    TW_NONCOPY(TwFile)
+    TW_DISABLE_COPY(TwFile)
 public:
     enum OpenMode {
         ReadOnly = 0x0001,
