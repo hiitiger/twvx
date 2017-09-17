@@ -15,34 +15,29 @@ struct DebugAssertData
     bool doBreak;
 };
 
-unsigned int __stdcall assertThread(void* a)
-{
-    DebugAssertData* d = (DebugAssertData*)a;
-    int reportMode = _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);
-    int ret = _CrtDbgReport(_CRT_ERROR, d->file, d->line, d->func, d->msg);
-    _CrtSetReportMode(_CRT_ERROR, reportMode);
-
-    if (ret == 1)
-    {
-        d->doBreak = true;
-    }
-
-    return 0;
-}
-
-
-bool twAssert( bool cond, const char* file, const char* func, int line, const char* msg )
+bool twAssert(bool cond, const char* file, const char* func, int line, const char* msg)
 {
     if (cond)
     {
         return false;
     }
 
-    DebugAssertData d = {file, func, line, msg, false};
-    HANDLE handle =  (HANDLE)_beginthreadex(nullptr, 0, assertThread, (void*)&d, 0, nullptr);
+    DebugAssertData d = { file, func, line, msg, false };
 
-    WaitForSingleObject(handle, INFINITE);
-    CloseHandle(handle);
+#ifdef _DEBUG
+    //      std::thread([&d](){
+    int reportMode = _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_WNDW);
+    int ret = _CrtDbgReport(_CRT_ERROR, d.file, d.line, d.func, d.msg);
+    _CrtSetReportMode(_CRT_ERROR, reportMode);
+
+    if (ret == 1)
+    {
+        d.doBreak = true;
+    }
+    //       }).join();
+#endif // _DEBUG
+
+
     if (d.doBreak)
     {
         DebugBreak();
@@ -50,5 +45,4 @@ bool twAssert( bool cond, const char* file, const char* func, int line, const ch
 
     return true;
 }
-
 #endif

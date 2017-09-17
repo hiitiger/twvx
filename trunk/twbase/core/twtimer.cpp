@@ -1,85 +1,130 @@
 #include "stable.h"
-
 #include "twtimer.h"
-#include "twsingleton.h"
-#include "twbaseservice.h"
 
-//////////////////////////////////////////////////////////////////////////
-
-TW_CLASS_IMPLEMENT(TwTimer, TwObject);
-
-TwTimer::TwTimer( TwObject* parent )
-: TwObject(parent)
-, sigTimeOut(this)
-, m_timerId(-1)
-, m_elapseMSecs(-1)
-{
-
-}
-
-TwTimer::~TwTimer()
-{
-    stop();
-}
-
-void TwTimer::setElapse( int milliseconds )
-{
-    m_elapseMSecs = milliseconds;
-    if (isActive())
+    class TimerCallback
     {
+        friend class TwTimer;
+        TwTimer* timer_;
+    public:
+        TimerCallback(TwTimer* timer) : timer_(timer)
+        {
+
+        }
+
+        void run()
+        {
+            if (timer_)
+            {
+                timer_->sigTimeout().emit();
+
+                if (timer_ && timer_->m_repeat)
+                {
+                    timer_->queueTimerTaskNext();
+                }
+            }
+        }
+    };
+
+    TW_CLASS_IMPLEMENT(TwTimer, TwObject);
+
+    TwTimer::TwTimer(TwObject* parent)
+        : TwObject(parent)
+        , m_sigTimeout(this)
+    {
+
+    }
+
+    TwTimer::~TwTimer()
+    {
+        stop();
+    }
+
+    void TwTimer::setInterval(int milliSeconds)
+    {
+        if (m_intervalMilliSeconds != milliSeconds)
+        {
+            if (isActive())
+            {
+                stop();
+                start(m_intervalMilliSeconds);
+            }
+            else
+                m_intervalMilliSeconds = milliSeconds;
+        }
+    }
+
+    void TwTimer::setRepeat(bool r)
+    {
+        DAssert(!isActive());
+        m_repeat = r;
+    }
+
+
+    void TwTimer::startSingleShot()
+    {
+        setRepeat(false);
         start();
     }
-}
 
-void TwTimer::start()
-{
-    if (m_elapseMSecs != -1)
+    void TwTimer::startSingleShot(int milliSeconds)
     {
-        start(m_elapseMSecs);
+        setRepeat(false);
+        start(milliSeconds);
     }
-}
 
-void TwTimer::start( int milliseconds )
-{
-    if (isActive())
+    void TwTimer::start()
     {
-        if (m_elapseMSecs == milliseconds)
+        if (m_intervalMilliSeconds != -1)
         {
-            return;
-        }
-        else
-        {
-            stop();
+            start(m_intervalMilliSeconds);
         }
     }
-    
-    m_elapseMSecs = milliseconds;
-    m_timerId = twBaseService()->setTimer(m_elapseMSecs, this);
-}
 
-void TwTimer::stop()
-{
-    if (m_timerId == -1)
+    void TwTimer::start(int milliSeconds)
     {
-        return;
+        if (isActive())
+        {
+            if (m_intervalMilliSeconds = milliSeconds)
+            {
+                return;
+            }
+            else
+                stop();
+        }
+
+        m_intervalMilliSeconds = milliSeconds;
+        queueTimerTask();
     }
-    twBaseService()->killTimer(m_timerId);
-    m_timerId = -1;
-}
 
-bool TwTimer::isActive() const
-{
-    return m_timerId != -1;
-}
+    void TwTimer::stop()
+    {
+        if (isActive())
+        {
+            m_callback->timer_ = nullptr;
+            m_callback = nullptr;
+        }
+    }
 
+    bool TwTimer::isActive() const
+    {
+        return (bool)m_callback;
+    }
 
-void TwTimer::startTimer( int milliSeconds, const std::function<bool()>& callback )
-{
-    twBaseService()->startTimer(milliSeconds, callback);
-}
+    TwSignal<void()>&  TwTimer::sigTimeout()
+    {
+        return m_sigTimeout;
+    }
 
-void TwTimer::startSingleShotTimer( int milliSeconds, const std::function<bool()>& callback )
-{
-    twBaseService()->startSingleShotTimer(milliSeconds, callback);
-}
+    void TwTimer::queueTimerTask()
+    {
+        DAssert(!isActive());
+        m_callback = std::make_shared<TimerCallback>((this));
+        TwMessageLoop::current()->postDelayed(std::bind(&TimerCallback::run, m_callback), m_intervalMilliSeconds);
+    }
+
+    void TwTimer::queueTimerTaskNext()
+    {
+        DAssert(isActive());
+        TwMessageLoop::current()->postDelayed(std::bind(&TimerCallback::run, m_callback), m_intervalMilliSeconds);
+    }
 

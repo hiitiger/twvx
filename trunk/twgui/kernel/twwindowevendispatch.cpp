@@ -12,8 +12,8 @@ TwWindowEventDispatcher::TwWindowEventDispatcher()
     , m_twWindow(nullptr)
     , m_dirtyWindow(false)
 {
-    m_paintTimer.setElapse(16);
-    m_paintTimer.sigTimeOut.connect(this, &TwWindowEventDispatcher::onPaintTimerTimeOut);
+    m_paintTimer.setInterval(16);
+    m_paintTimer.sigTimeout().connect(this, &TwWindowEventDispatcher::onPaintTimerTimeOut);
 }
 
 TwWindowEventDispatcher::~TwWindowEventDispatcher()
@@ -35,11 +35,7 @@ void TwWindowEventDispatcher::schedulePaint( const TwRect<int>& rc /*= TwRect<in
 void TwWindowEventDispatcher::onPaintTimerTimeOut(TwObject* sender)
 {
     TW_UNUSED(sender);
-    if (m_dirtyWindow)
-    {
-        m_twWindow->update();
-        m_dirtyWindow = false;
-    }
+    m_twWindow->update();
 }
 
 void TwWindowEventDispatcher::dispatchEvent( TwEvent* ev )

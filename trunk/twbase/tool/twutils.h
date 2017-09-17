@@ -9,6 +9,7 @@ namespace TwUtils
     std::wstring TW_BASE_API appDataPath();
 
     std::wstring TW_BASE_API applicationDirPath();
+    std::wstring TW_BASE_API appProcessName();
 
     std::wstring TW_BASE_API iexplorerPath();
 

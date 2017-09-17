@@ -9,138 +9,140 @@
 
 static TlsStore<TwMessageLoop> G_MsgLoopTlsStore;
 
+
+
 LRESULT CALLBACK TwMessageLoop::LoopWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     TwMessageLoop *pThis = (TwMessageLoop*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     DAssert(pThis);pThis;
     if (uMsg == k_MsgLoopTaskMsg)
     {
-        pThis->runTask();
+        pThis->runTaskQueue();
     }
-    else if (uMsg == k_MsgLoopBaseservice)
+    else if (uMsg == k_MsgLoopWakeMsg)
     {
-        pThis->m_baseservice->onServiceMessage((int)wParam, (void*)lParam);
+
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-struct AsyncFunctionTask : public TwTask
-{
-    AsyncFunctionTask(const std::function<void()>& func):m_func(func) {;}
 
-    virtual void run() {m_func();}
-    std::function<void()> m_func;
-};
-
-struct QuitTask : public TwTask
-{
-    QuitTask(TwMessageLoop* loop, int retCode) :m_loop(loop), m_retCode(retCode) {;}
-
-    virtual void run() 
-    {
-        *(m_loop->m_running) = false; 
-        m_loop->m_retCode = this->m_retCode;
-    }
-
-    TwMessageLoop* m_loop;
-    int m_retCode;
-};
 
 TwMessageLoop::TwMessageLoop()
-: m_running(nullptr)
-, m_hasPendingTask(false)
+: m_hasWorkTask(false)
 , m_retCode(0)
 , m_msgWindow(nullptr)
-, m_baseservice(new TwBaseService(this))
 {
-    DAssert_M(!currentLoop(),"error: only one message loop can exist in a thread");
+    DAssert_M(!current(),"error: only one message loop can exist in a thread");
     G_MsgLoopTlsStore.setValue(this);
     initNativeMsgWindow();
 }
 
 TwMessageLoop::~TwMessageLoop()
 {
-    m_baseservice.reset(nullptr);
 
     ::DestroyWindow(m_msgWindow);
     m_msgWindow = nullptr;
     G_MsgLoopTlsStore.setValue(nullptr);
 }
 
-int TwMessageLoop::run(IDispatcher* disp)
+int TwMessageLoop::run()
 {
-    bool running = true;;
-    bool* prevRunState = m_running;
-    m_running = &running ;
-    
-    runLoop(disp);
-
-    m_running = prevRunState;
-
-    return m_retCode;
-
-}
-
-bool TwMessageLoop::runLoop( IDispatcher* disp /*= nullptr*/)
-{
-    for(;isRunning();)
+    DAssert(this == current());
+    while (isRunning())
     {
-        bool hasPendingWork = processMessage(disp);
-        if (!isRunning())
-        {
-            break;
-        }
+        runOnce();
 
-        hasPendingWork |= runTask();
-        if (!isRunning())
+        if (isRunning())
         {
-            break;
-        }
-
-        if (!hasPendingWork)
-        {
-            waitWork();
+            tryIdleWait();
         }
     }
 
-    return *m_running;
+    return m_retCode;
+}
+
+
+void TwMessageLoop::runOnce()
+{
+    DAssert(this == current());
+    if (isRunning())
+        processSystemMessage();
+
+    if (isRunning())
+        runTaskQueue();
+
+    if (isRunning())
+        runDelayQueue();
+}
+
+void TwMessageLoop::tryIdleWait(unsigned int milliSeconds)
+{
+    DAssert(this == current());
+    if (m_hasWorkTask) {
+        return;
+    }
+    auto now = TwTimeTick::now();
+    if (!m_nextDelay.isNull())
+    {
+        unsigned int wait = static_cast<unsigned int>((m_nextDelay - now).milliSecs());
+        if (wait > 0)
+        {
+            wait = min(wait, milliSeconds);
+            idleWait(wait);
+        }
+    }
+    else
+    {
+        idleWait(-1);
+    }
+}
+
+void TwMessageLoop::idleWait(unsigned int milliSeconds)
+{
+    DAssert(this == current());
+
+    ::MsgWaitForMultipleObjectsEx(0, nullptr, milliSeconds, QS_ALLINPUT, MWMO_INPUTAVAILABLE);
+}
+
+bool TwMessageLoop::isRunning() const
+{
+    return m_running;
 }
 
 void TwMessageLoop::quit( int retCode /*= 0*/ )
 {
-    postTask(new QuitTask(this, retCode));
+    if (m_running)
+    {
+        postFunction([retCode]() {
+            TwMessageLoop::current()->m_retCode = retCode;
+            TwMessageLoop::current()->m_running = false;
+
+        });
+    }
 }
 
 void TwMessageLoop::quitQuick( int retCode /*= 0*/ )
 {
     DAssert(isRunning());
-    *m_running = false;
+    m_running = false;
     m_retCode = retCode;
     awake();
 }
 
-void TwMessageLoop::postTask( TwTask* task)
-{
-    postTask(std::shared_ptr<TwTask>(task));
-}
-
-void TwMessageLoop::postTask(const std::shared_ptr<TwTask>& task)
-{
-    TwScopeLovkV1 lock(&m_taskLock);
-    m_pendingTaskQueue.push(task);
-    m_hasPendingTask = true;
-    awakeTask();
-}
-
 void TwMessageLoop::postFunction( const std::function<void()>& taskFunc)
 {
-    postTask(new AsyncFunctionTask(taskFunc));
+    add(taskFunc);
+}
+
+void TwMessageLoop::postDelayed(const std::function<void()>& func, int milliSeconds)
+{
+    add({ func, TwTimeTick::now().addMilliSecs(milliSeconds) });
 }
 
 void TwMessageLoop::awake()
 {
     ::PostMessage(m_msgWindow, k_MsgLoopWakeMsg, 0, 0);
-
 }
 
 void TwMessageLoop::awakeTask()
@@ -148,93 +150,95 @@ void TwMessageLoop::awakeTask()
     ::PostMessage(m_msgWindow, k_MsgLoopTaskMsg, 0, 0);
 }
 
-bool TwMessageLoop::processMessage( IDispatcher* disp)
+
+void TwMessageLoop::runTaskQueue()
 {
-    /*
-    PeekMessage MSDN:
-    During this call, the system delivers pending, non queued messages, 
-    that is, messages sent to windows owned by the calling thread.
-    */
-    bool hasSentMessage = false;
+    auto now = TwTimeTick::now();
+    std::deque<WrapTask> taskQueue = lockSwapTaskQueue();
 
-    do 
+    for (auto it = taskQueue.begin(); it != taskQueue.end(); ++it)
     {
-        DWORD queuestatus = ::GetQueueStatus(QS_SENDMESSAGE);
-        if (HIWORD(queuestatus) & QS_SENDMESSAGE)
-        {
-            hasSentMessage = true;
-        }
-
-        MSG msg;
-
-        if (!PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+        if (!isRunning())
         {
             break;
         }
-
-        if (msg.message == WM_QUIT)
+        if (it->run.isNull())
         {
-            quitQuick(msg.wParam);
-            //Quit Should be posted to outer loop.
-            ::PostQuitMessage(static_cast<int>(msg.wParam));
-            break;
-        }
-
-        if (disp && disp->dispatchWinMessage(msg))
-        {
-
+            it->invoke();
         }
         else
         {
-            ::TranslateMessage(&msg);
-            ::DispatchMessage(&msg);
+            if (now >= it->run)
+            {
+                it->invoke();
+                now = TwTimeTick::now();
+            }
+            else
+            {
+                m_delayQueue.push(std::move(*it));
+            }
+        }
+    }
+
+    m_hasWorkTask = m_delayQueue.size() != 0;
+}
+
+void TwMessageLoop::runDelayQueue()
+{
+    auto now = TwTimeTick::now();
+    while (true)
+    {
+        if (m_delayQueue.empty() || m_delayQueue.top().run > now)
+        {
+            break;
+        }
+        auto task = std::move(const_cast<WrapTask&>(m_delayQueue.top()));
+        m_delayQueue.pop();
+        task.invoke();
+        now = TwTimeTick::now();
+    }
+
+    if (m_delayQueue.empty())
+    {
+        m_nextDelay.setZero();
+    }
+    else
+    {
+        m_nextDelay = m_delayQueue.top().run;
+    }
+}
+
+void TwMessageLoop::processSystemMessage()
+{
+    MSG msg = { 0 };
+    while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+    {
+        if (msg.message == WM_QUIT)
+        {
+            m_running = false;
+            break;
         }
 
-//         if (m_hasPendingTask || !isRunning())
-//         {
-//             break;
-//         }
-    }while (false);
-
-    return hasSentMessage;
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+    }
 }
 
-bool TwMessageLoop::runTask()
+void TwMessageLoop::add(WrapTask&& task)
 {
-    if (!m_hasPendingTask)
-    {
-        return false;
-    }
+    if (!m_running) { return; }
 
-    if(!loadWorkTask())
-    {
-        return false;
-    }
-
-    m_currentTask->run();
-    m_currentTask.reset();
-
-    return m_hasPendingTask;
+    TwScopeLovkV1 lock(&m_taskLock);
+    taskSeq_ += 1;
+    task.seq_ = taskSeq_;
+    m_taskQueue.push_back(std::move(task));
+    awakeTask();
 }
 
-
-void TwMessageLoop::waitWork()
+std::deque<TwMessageLoop::WrapTask> TwMessageLoop::lockSwapTaskQueue()
 {
-    /*
-    WaitMessage MSDN:
-    Note that WaitMessage does not return if there is unread input in the message queue after the thread has called a function to check the queue. 
-    This is because functions such as PeekMessage, GetMessage, GetQueueStatus, WaitMessage, MsgWaitForMultipleObjects, 
-    and MsgWaitForMultipleObjectsEx check the queue and then change the state information for the queue so that the input is no longer considered new. 
-    A subsequent call to WaitMessage will not return until new input of the specified type arrives. The existing unread input (received prior to the last time the thread checked the queue) is ignored.
-    */
-    //::WaitMessage();
-
-    /*
-    MsgWaitForMultipleObjectsEx MSDN:
-    MWMO_INPUTAVAILABLE 
-    The function returns if input exists for the queue, even if the input has been seen (but not removed) using a call to another function, such as PeekMessage.
-    */
-    ::MsgWaitForMultipleObjectsEx(0, nullptr, INFINITE, QS_ALLINPUT, MWMO_INPUTAVAILABLE);
+    TwScopeLovkV1 lock(&m_taskLock);
+    return std::move(m_taskQueue);
 }
 
 void TwMessageLoop::initNativeMsgWindow()
@@ -244,34 +248,9 @@ void TwMessageLoop::initNativeMsgWindow()
     ::SetWindowLongPtr(m_msgWindow, GWLP_WNDPROC, (LONG_PTR)TwMessageLoop::LoopWndProc);
 }
 
-TwMessageLoop* TwMessageLoop::currentLoop()
+TwMessageLoop* TwMessageLoop::current()
 {
     return G_MsgLoopTlsStore.getValue();
 }
 
-TwBaseService* TwMessageLoop::baseService()
-{
-    return m_baseservice.get();
-}
-
-bool TwMessageLoop::loadWorkTask()
-{
-    TwScopeLovkV1 lock(&m_taskLock);
-    if (m_pendingTaskQueue.empty())
-    {
-        return false;
-    }
-    m_currentTask = m_pendingTaskQueue.front();
-    m_pendingTaskQueue.pop();
-    if (m_pendingTaskQueue.empty())
-    {
-        m_hasPendingTask = false;
-    }
-    return true;
-}
-
-bool TwMessageLoop::isRunning() const
-{
-    return m_running && *m_running;
-}
 

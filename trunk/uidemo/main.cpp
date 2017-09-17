@@ -4,6 +4,9 @@
 INT WINAPI WinMain( __in HINSTANCE , __in_opt HINSTANCE , __in_opt LPSTR , __in int  )
 {
     _CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+
+    DebugConsole::getConsole();
+
     TwApp app;
 
     TwWindow* w = new TwWindow;
@@ -82,23 +85,14 @@ INT WINAPI WinMain( __in HINSTANCE , __in_opt HINSTANCE , __in_opt LPSTR , __in 
     );
 
     w->show();
-    TwTimer::startTimer(100, [=]()
+    TwTimer t;
+    t.start(100);
+    t.sigTimeout().connect([=](TwObject*)
     {
         button2->setWidth(button2->width() + 1);
         button2->setHeight(button2->height() + 1);
         return true;
     });
-
-     //for (int i = 0; i < 5000; ++i)
-     //{
-     //    TwTextButton* cc = new TwTextButton();
-     //    cc->setText(L"Hello Button");
-     //    cc->setWidth(100);
-     //    cc->setHeight(30);
-     //    cc->setPos(i * 150 % 1600, i);
-     //  
-     //    button->addWidget(cc);
-     //}
   //  TwTestsR::get()->run();
 
     app.run();

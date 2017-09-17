@@ -3,6 +3,7 @@
 
 #include "../twbase/base/twtype.h"
 #include "../twbase/base/twbasic.h"
+#include "../twbase/base/datetime.h"
 #include "../twbase/base/twsingleton.h"
 
 #include "../twbase/task/twtask.h"
@@ -46,3 +47,4 @@
 #include "../twbase/tool/textstream.h"
 #include "../twbase/tool/twsettings.h"
 #include "../twbase/log/twlog.h"
+#include "../twbase/log/debugconsole.h"

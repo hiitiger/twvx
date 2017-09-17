@@ -1,10 +1,11 @@
 #include "stable.h"
 #include "twlog.h"
 #include <process.h>
-#include <time.h>
-
+#include "tool/twfile.h"
+#include "base/datetime.h"
 
 const int k_MAXLOGFILESIZE = 32 * 1024 * 1024;
+static bool k_logQuit = false;
 
 class TwLog
 {
@@ -21,48 +22,43 @@ public:
         char file[128];
         char function[128];
         unsigned int line;
-        //__time64_t timet;
-        SYSTEMTIME timet;
+        TwDateTime datetime;
         std::wstring data;
     };
 
 
     DWORD m_threadId;
     std::wstring m_fileName;
-    HANDLE m_writeEvent;
+    TwWaitableEvent m_writeEvent;
     HANDLE m_thread;
-    TwLock m_logLock;
-    std::deque<LogItem*> m_logItems;
+    std::mutex m_logLock;
+    std::deque<std::unique_ptr<LogItem>> m_logItems;
 
     TwLog()
         : m_threadId(0)
-        , m_writeEvent(NULL)
+        , m_writeEvent()
         , m_thread(NULL)
     {
 
         m_fileName = TwUtils::appDataPath();
-        m_fileName.append(L"\\twvx\\");
+        m_fileName.append(L"\\log\\");
         TwUtils::makeSureDirExist(m_fileName);
 
-        WCHAR exePath[MAX_PATH];
-        GetModuleFileNameW(NULL, exePath, MAX_PATH);
-        WCHAR* name = wcsrchr(exePath, '\\');
-
-        m_fileName.append(name);
+        m_fileName.append(TwUtils::appProcessName());
         m_fileName.erase(m_fileName.find_last_of('.'));
         m_fileName.append(L".log");
 
-        m_writeEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
         start();
     }
     ~TwLog()
     {
-        ::PostThreadMessageW(m_threadId, WM_USER + 0X101, 0, 0);
+        k_logQuit = true;
+        m_writeEvent.set();
+
         if (WAIT_TIMEOUT == WaitForSingleObject(m_thread, 5000))
         {
             TerminateThread(m_thread, -1);
         }
-        CloseHandle(m_writeEvent);
         CloseHandle(m_thread);
     }
 
@@ -76,6 +72,7 @@ public:
     {
         m_thread = (HANDLE)_beginthreadex(NULL, 0, logThread, (void*)this, 0, (unsigned int*)&m_threadId);
 
+        addLog("MOD_LOGGER", __FILE__, __FUNCTION__, __LINE__, L"Start...");
     }
 
     void addLog(const char* mod, const char* file, const char* function, unsigned int line, const std::wstring& data)
@@ -85,19 +82,20 @@ public:
         _snprintf_s(item->file, _TRUNCATE, file);
         _snprintf_s(item->function, _TRUNCATE, function);
         item->line = line;
-        GetLocalTime(&item->timet);
+        item->datetime = TwDateTime::now();
         item->data = data;
-        TwScopeLovkV1 lock(&m_logLock);
-        m_logItems.push_back(item);
-        SetEvent(m_writeEvent);
+
+        std::lock_guard<std::mutex> lock(m_logLock);
+        m_logItems.push_back(std::unique_ptr<LogItem>(item));
+        m_writeEvent.set();
     }
 
 private:
     void _writeLog(TwFile& logFile)
     {
-        std::deque<LogItem*> logItems;
+        std::deque<std::unique_ptr<LogItem>> logItems;
         {
-            TwScopeLovkV1 lock(&m_logLock);
+            std::lock_guard<std::mutex> lock(m_logLock);
             logItems.swap(m_logItems);
         }
 
@@ -106,22 +104,23 @@ private:
             logFile.setSize(0);
         }
 
-        for (std::deque<LogItem*>::iterator it = logItems.begin(); it != logItems.end(); ++it)
+        const size_t HEADER_SIZE = 512;
+        char log[HEADER_SIZE] = { 0 };
+
+        for (auto it = logItems.begin(); it != logItems.end(); ++it)
         {
-            LogItem* item = *it;
+            auto item = std::move(*it);
 
-            char timesz[128] = { 0 };
-            sprintf_s(timesz, "%d-%d-%d %d:%d:%d:%d ", item->timet.wYear, item->timet.wMonth, item->timet.wDay, item->timet.wHour, item->timet.wMinute, item->timet.wSecond, item->timet.wMilliseconds);
-            logFile.write(timesz, strlen(timesz));
+            std::string timesz = toString(item->datetime);
+            logFile.write(timesz.data(), timesz.size());
 
-            size_t logSize = item->data.size();
-            char* log = (char*)malloc(sizeof(char) * 320 + logSize + 1);
-            memset(log, 0, sizeof(char) * 320 + logSize + 1);
-            int writeSize = sprintf_s(log, sizeof(char) * 256 + 32 + logSize + 1, "mod:%s,file:%s,function:%s,line:%d,log:%s\r\n", item->mod, item->file, item->function, item->line, TwUtils::toUtf8(item->data.c_str(), static_cast<int>(item->data.size())).c_str());
-            logFile.write(log, writeSize);
-            free(log);
+            memset(log, 0, sizeof(char) * HEADER_SIZE);
+            int headerSize = sprintf_s(log, HEADER_SIZE, " mod:%s,file:%s,function:%s,line:%d,log:", item->mod, item->file, item->function, item->line);
+            logFile.write(log, headerSize);
 
-            delete item;
+            std::string content = TwUtils::toUtf8(item->data.c_str(), static_cast<int>(item->data.size()));
+            logFile.write(content.c_str(), content.size());
+            logFile.write("\r\n", 2);
         }
     }
 
@@ -134,48 +133,50 @@ private:
     void _logThread()
     {
         TwFile logFile(m_fileName.c_str());
-        logFile.open(TwFile::ReadWrite|TwFile::Append);
+        logFile.open(TwFile::ReadWrite | TwFile::Append);
+        if (logFile.size() > k_MAXLOGFILESIZE)
+        {
+            logFile.close();
+            std::wstring bak = m_fileName + L".bak";
+            if (TwFile::exist(bak))
+            {
+                DeleteFileW(bak.c_str());
+            }
+            MoveFileW(m_fileName.c_str(), bak.c_str());
+            logFile.open(TwFile::ReadWrite | TwFile::Truncate);
+        }
 
         bool running = true;
         while (running)
         {
-            DWORD wait = MsgWaitForMultipleObjects(1, &m_writeEvent, FALSE, 5000, QS_ALLINPUT);
-            if (wait == WAIT_OBJECT_0 || wait == WAIT_TIMEOUT)
+            TwWaitableEvent::State s = m_writeEvent.wait(5000);
+            if (s == TwWaitableEvent::Signal || s == TwWaitableEvent::Timeout)
             {
                 _writeLog(logFile);
-            }
-            else if(wait == WAIT_OBJECT_0 + 1)
-            {
-                MSG msg;
-                while (GetMessageW(&msg, NULL, 0, 0))
+                if (k_logQuit)
                 {
-                    if (msg.message == WM_USER + 0X101)
-                    {
-                        _writeLog(logFile);
-                        SYSTEMTIME timet;
-                        ::GetLocalTime(&timet);
-                        char timesz[128] = { 0 };
-                        sprintf_s(timesz, "%d-%d-%d %d:%d:%d:%d End...", timet.wYear, timet.wMonth, timet.wDay, timet.wHour, timet.wMinute, timet.wSecond, timet.wMilliseconds);
-                        logFile.write(timesz, strlen(timesz));
+                    std::string timesz = toString(TwDateTime::now());
+                    logFile.write(timesz.data(), timesz.size());
 
-                        running = false;
-                        break;
-                    }
-
-                    TranslateMessage(&msg);
-                    DispatchMessage(&msg);
+                    std::string end = " End..\r\n";
+                    logFile.write(end.data(), end.size());
+                    running = false;
+                    break;
                 }
             }
             else
             {
                 break;
             }
-        }     
+        }
     }
 };
 
 
 LogStream::~LogStream()
 {
-    TwLog::instance()->addLog(m_mod, m_file, m_function, m_line, m_stream.data());
+    if (!k_logQuit)
+    {
+        TwLog::instance()->addLog(m_mod, m_file, m_function, m_line, m_stream.data());
+    }
 }

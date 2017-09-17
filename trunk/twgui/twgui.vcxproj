@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{935D9B70-07E0-337B-B3B2-A4D65380BFCD}</ProjectGuid>
+    <ProjectGuid>{B9F0DCAE-83D1-322A-88ED-C551BAF54677}</ProjectGuid>
     <RootNamespace>twgui</RootNamespace>
     <Keyword>Qt4VSv1.0</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;" Label="Configuration">
-    <PlatformToolSet>v120</PlatformToolSet>
+  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;" Label="Configuration">
+    <PlatformToolSet>v140</PlatformToolSet>
     <OutputDirectory>..\bin\$(Configuration)\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
@@ -25,8 +25,8 @@
     <IntermediateDirectory>..\objdir\$(ProjectName)\$(Configuration)\</IntermediateDirectory>
     <PrimaryOutput>twgui</PrimaryOutput>
   </PropertyGroup>
-  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;" Label="Configuration">
-    <PlatformToolSet>v120</PlatformToolSet>
+  <PropertyGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;" Label="Configuration">
+    <PlatformToolSet>v140</PlatformToolSet>
     <OutputDirectory>..\bin\$(Configuration)\</OutputDirectory>
     <ATLMinimizesCRunTimeLibraryUsage>false</ATLMinimizesCRunTimeLibraryUsage>
     <CharacterSet>NotSet</CharacterSet>
@@ -36,63 +36,27 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings" />
-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;" Label="PropertySheets">
+  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
   </ImportGroup>
-  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;" Label="PropertySheets">
+  <ImportGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists(&apos;$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props&apos;)" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">..\bin\$(Configuration)\</OutDir>
-    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">..\objdir\$(ProjectName)\$(Configuration)\</IntDir>
-    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">twgui</TargetName>
-    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</IgnoreImportLibrary>
     <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">..\bin\$(Configuration)\</OutDir>
     <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">..\objdir\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">twgui</TargetName>
     <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">true</IgnoreImportLibrary>
+    <OutDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">..\bin\$(Configuration)\</OutDir>
+    <IntDir Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">..\objdir\$(ProjectName)\$(Configuration)\</IntDir>
+    <TargetName Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">twgui</TargetName>
+    <IgnoreImportLibrary Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">true</IgnoreImportLibrary>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">
-    <ClCompile>
-      <AdditionalIncludeDirectories>.;.;..\include;..\include\twbase;..\include\twgui;C:\Qt\Qt5.5.1\5.5\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-Zc:strictStrings -w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
-      <AssemblerListingLocation>..\objdir\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
-      <BrowseInformation>false</BrowseInformation>
-      <DebugInformationFormat>None</DebugInformationFormat>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <ForcedIncludeFiles>stable.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <ObjectFileName>..\objdir\$(ProjectName)\$(Configuration)\</ObjectFileName>
-      <Optimization>MaxSpeed</Optimization>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>stable.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>$(IntDir)\twgui.pch</PrecompiledHeaderOutputFile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_GUI;TW_BASE_STATIC;TW_GUI_STATIC;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <PreprocessToFile>false</PreprocessToFile>
-      <ProgramDataBaseFileName></ProgramDataBaseFileName>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <WarningLevel>Level3</WarningLevel>
-    </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)\twgui.lib</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Lib>
-    <Midl>
-      <DefaultCharType>Unsigned</DefaultCharType>
-      <EnableErrorChecks>None</EnableErrorChecks>
-      <WarningLevel>0</WarningLevel>
-    </Midl>
-    <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_GUI;TW_BASE_STATIC;TW_GUI_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-    </ResourceCompile>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;.;..\include;..\include\twbase;..\include\twgui;C:\Qt\Qt5.5.1\5.5\msvc2013\mkspecs\win32-msvc2013;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>-w34100 -w34189 -w44996 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>&quot;.&quot;;&quot;..\include&quot;;&quot;..\include\twbase&quot;;&quot;..\include\twgui&quot;;..\..\qt4.8.6\mkspecs\win32-msvc2015;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>..\objdir\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -103,25 +67,61 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stable.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)\twgui.pch</PrecompiledHeaderOutputFile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_GUI;TW_BASE_STATIC;TW_GUI_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;_WIN32_WINNT=0x0601;TW_DLL_GUI;TW_BASE_STATIC;TW_GUI_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>.\</ProgramDataBaseFileName>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
-    <Lib>
-      <OutputFile>$(OutDir)\twgui.lib</OutputFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-    </Lib>
+    <Link>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    </Link>
     <Midl>
       <DefaultCharType>Unsigned</DefaultCharType>
       <EnableErrorChecks>None</EnableErrorChecks>
       <WarningLevel>0</WarningLevel>
     </Midl>
     <ResourceCompile>
-      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;TW_DLL_GUI;TW_BASE_STATIC;TW_GUI_STATIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;_WIN32_WINNT=0x0601;TW_DLL_GUI;TW_BASE_STATIC;TW_GUI_STATIC;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ResourceOutputFileName>$(OutDir)\$(InputName).res</ResourceOutputFileName>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">
+    <ClCompile>
+      <AdditionalIncludeDirectories>&quot;.&quot;;&quot;..\include&quot;;&quot;..\include\twbase&quot;;&quot;..\include\twgui&quot;;..\..\qt4.8.6\mkspecs\win32-msvc2015;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
+      <AssemblerListingLocation>..\objdir\$(ProjectName)\$(Configuration)\</AssemblerListingLocation>
+      <BrowseInformation>false</BrowseInformation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ForcedIncludeFiles>stable.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <ObjectFileName>..\objdir\$(ProjectName)\$(Configuration)\</ObjectFileName>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stable.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>$(IntDir)\twgui.pch</PrecompiledHeaderOutputFile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;_WIN32_WINNT=0x0601;TW_DLL_GUI;TW_BASE_STATIC;TW_GUI_STATIC;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessToFile>false</PreprocessToFile>
+      <ProgramDataBaseFileName>.\</ProgramDataBaseFileName>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <WarningLevel>Level3</WarningLevel>
+    </ClCompile>
+    <Link>
+      <IgnoreImportLibrary>true</IgnoreImportLibrary>
+    </Link>
+    <Midl>
+      <DefaultCharType>Unsigned</DefaultCharType>
+      <EnableErrorChecks>None</EnableErrorChecks>
+      <WarningLevel>0</WarningLevel>
+    </Midl>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_WINDOWS;UNICODE;WIN32;_WIN32_WINNT=0x0601;TW_DLL_GUI;TW_BASE_STATIC;TW_GUI_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ResourceOutputFileName>$(OutDir)\$(InputName).res</ResourceOutputFileName>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -174,12 +174,12 @@
     <ClInclude Include="kernel\nativewindow.h" />
     <ClInclude Include="kernel\simplewindowbase.h" />
     <CustomBuild Include="stable.h">
-      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">echo /*-------------------------------------------------------------------- >stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * Precompiled header source file used by Visual Studio.NET to generate>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * the .pch file.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * Due to issues with the dependencies checker within the IDE, it>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * sometimes fails to recompile the PCH file, if we force the IDE to>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * create the PCH file directly from the header file.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * This file is auto-generated by qmake since no PRECOMPILED_SOURCE was>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * specified, and is used as the common stdafx.cpp. The file is only>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * generated when creating .vcxproj project files, and is not used for>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * command line compilations by nmake.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * WARNING: All changes made in this file will be lost.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo --------------------------------------------------------------------*/>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo #include &quot;stable.h&quot;>>stable.h.cpp</Command>
-      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">Generating precompiled header source file &apos;stable.h.cpp&apos; ...</Message>
-      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">stable.h.cpp;%(Outputs)</Outputs>
       <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">echo /*-------------------------------------------------------------------- >stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * Precompiled header source file used by Visual Studio.NET to generate>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * the .pch file.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * Due to issues with the dependencies checker within the IDE, it>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * sometimes fails to recompile the PCH file, if we force the IDE to>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * create the PCH file directly from the header file.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * This file is auto-generated by qmake since no PRECOMPILED_SOURCE was>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * specified, and is used as the common stdafx.cpp. The file is only>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * generated when creating .vcxproj project files, and is not used for>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * command line compilations by nmake.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * WARNING: All changes made in this file will be lost.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo --------------------------------------------------------------------*/>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo #include &quot;stable.h&quot;>>stable.h.cpp</Command>
       <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">Generating precompiled header source file &apos;stable.h.cpp&apos; ...</Message>
       <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">stable.h.cpp;%(Outputs)</Outputs>
+      <Command Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">echo /*-------------------------------------------------------------------- >stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * Precompiled header source file used by Visual Studio.NET to generate>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * the .pch file.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * Due to issues with the dependencies checker within the IDE, it>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * sometimes fails to recompile the PCH file, if we force the IDE to>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * create the PCH file directly from the header file.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * This file is auto-generated by qmake since no PRECOMPILED_SOURCE was>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * specified, and is used as the common stdafx.cpp. The file is only>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * generated when creating .vcxproj project files, and is not used for>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * command line compilations by nmake.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo *>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo * WARNING: All changes made in this file will be lost.>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo --------------------------------------------------------------------*/>>stable.h.cpp&#x000D;&#x000A;if errorlevel 1 goto VCEnd&#x000D;&#x000A;echo #include &quot;stable.h&quot;>>stable.h.cpp</Command>
+      <Message Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">Generating precompiled header source file &apos;stable.h.cpp&apos; ...</Message>
+      <Outputs Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">stable.h.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <ClInclude Include="layout\twanchorlayout.h" />
     <ClInclude Include="core\twapp.h" />
@@ -233,12 +233,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stable.h.cpp">
-      <ForcedIncludeFiles Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">$(NOINHERIT)</ForcedIncludeFiles>
-      <PrecompiledHeaderFile Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">stable.h</PrecompiledHeaderFile>
-      <PrecompiledHeader Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">Create</PrecompiledHeader>
       <ForcedIncludeFiles Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">$(NOINHERIT)</ForcedIncludeFiles>
       <PrecompiledHeaderFile Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">stable.h</PrecompiledHeaderFile>
       <PrecompiledHeader Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Debug|Win32&apos;">Create</PrecompiledHeader>
+      <ForcedIncludeFiles Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">$(NOINHERIT)</ForcedIncludeFiles>
+      <PrecompiledHeaderFile Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">stable.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="&apos;$(Configuration)|$(Platform)&apos;==&apos;Release|Win32&apos;">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

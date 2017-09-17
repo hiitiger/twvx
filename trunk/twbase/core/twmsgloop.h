@@ -1,37 +1,78 @@
 #pragma once
 
-#include "twscoped_ptr.h"
 
-struct TwTask;
-class TwBaseService;
-
-/*
-    * TwMessageLoop
-    ** Always use TwMessageLoop or it's subclass if possible!
-    ** Task will be executed during the loop, not in the callback WndPoc !
-    ** If u use another message loop or a system modal dialog, it will prevent the task from executing!
-   
-*/
 class TW_BASE_API TwMessageLoop
 {
     TW_DISABLE_COPY(TwMessageLoop);
-    friend class TwBaseService;
     friend struct QuitTask;
 
 public:
 
-    struct IDispatcher
+    class WrapTask
     {
-        virtual bool dispatchWinMessage(const MSG& msg) = 0;
+ 
+    public:
+        WrapTask(const std::function<void()>& func, const TwTimeTick& runTime)
+            : func_(func), post(TwTimeTick::now()), run(runTime)
+        {
+
+        }
+
+        WrapTask(std::function<void()>&& func, const TwTimeTick& runTime)
+            : func_(std::move(func)), post(TwTimeTick::now()), run(runTime)
+        {
+
+        }
+
+        WrapTask(const std::function<void()>& func)
+            : func_(func), post(TwTimeTick::now())
+        {
+
+        }
+
+        WrapTask(std::function<void()>&& func)
+            : func_(func), post(TwTimeTick::now())
+        {
+
+        }
+
+        WrapTask(WrapTask&&) = default;
+
+        WrapTask& operator=(WrapTask&&) = default;
+
+        bool operator < (const WrapTask& other) const
+        {
+            if (run < other.run)
+            {
+                return false;
+            }
+            if (run > other.run)
+            {
+                return true;
+            }
+            return seq_ > other.seq_;
+        }
+
+
+        void invoke()
+        {
+            func_();
+        }
+
+        std::function<void()> func_;
+
+        TwTimeTick post;
+
+        TwTimeTick run;
+
+        int seq_ = 0;
     };
 
     TwMessageLoop();
     virtual ~TwMessageLoop();
 
-    static TwMessageLoop* currentLoop();
-    TwBaseService* baseService();
+    static TwMessageLoop* current();
 
-    int run(IDispatcher* disp = nullptr);
     bool isRunning() const;
 
     //async quit by quittask 
@@ -39,38 +80,41 @@ public:
     //just set quit flag, it will prevent remained tasks from running.
     void quitQuick(int retCode = 0);
 
-    void postTask(TwTask*);
-    void postTask(const std::shared_ptr<TwTask>&);
     void postFunction(const std::function<void()>&);
+    void postDelayed(const  std::function<void()>& func, int milliSeconds);
 
     void awake();
     void awakeTask();
 
-protected:
-    bool runLoop(IDispatcher* disp = nullptr);
+    virtual int run();
+    virtual void runOnce();
+    virtual void tryIdleWait(unsigned int milliSeconds = UINT32_MAX);
+    virtual void idleWait(unsigned int milliSeconds);
 
-    /*virtual*/ bool processMessage(IDispatcher* disp);
-    /*virtual*/ bool runTask();
-    /*virtual*/ void waitWork();
+protected:
+    void runTaskQueue();
+    void runDelayQueue();
+    virtual void processSystemMessage();
 
 private:
+    void add(WrapTask&& task);
+
     void initNativeMsgWindow();
     static LRESULT CALLBACK LoopWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-    bool loadWorkTask();
+    std::deque<WrapTask> lockSwapTaskQueue();
 
 private:
-    typedef std::queue<std::shared_ptr<TwTask> > TaskQueue;
 
-    bool* m_running;
-    volatile bool m_hasPendingTask;
+    std::atomic<bool> m_running = true;
+    std::atomic<bool> m_hasWorkTask = false;
     int m_retCode;
     HWND m_msgWindow;
 
     TwLock m_taskLock;
-    TaskQueue m_pendingTaskQueue;
-   // TaskQueue m_workTaskQueue;
-    std::shared_ptr<TwTask> m_currentTask;
+    std::atomic<int> taskSeq_ = 0;
+    std::deque<WrapTask>  m_taskQueue;
+    std::priority_queue<WrapTask> m_delayQueue;
+    TwTimeTick m_nextDelay;
 
-    TwScopedPtr<TwBaseService> m_baseservice;
 };

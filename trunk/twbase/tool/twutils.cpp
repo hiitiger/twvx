@@ -72,6 +72,24 @@ std::wstring  TwUtils::applicationDirPath()
     return dirPath;
 }
 
+std::wstring TW_BASE_API TwUtils::appProcessName()
+{
+    std::wstring procssName;
+    WCHAR exePath[MAX_PATH] = { 0 };
+    GetModuleFileNameW(NULL, exePath, sizeof(exePath) / sizeof(WCHAR));
+    WCHAR* name = wcsrchr(exePath, '\\');
+    if (name != 0)
+    {
+        procssName = name + 1;
+    }
+    else
+    {
+        procssName = exePath;
+    }
+
+    return procssName;
+}
+
 std::wstring  TwUtils::iexplorerPath()
 {
     HKEY ieKey;

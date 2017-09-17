@@ -4,6 +4,12 @@
 class TW_BASE_API TwWaitableEvent
 {
 public:
+    enum State
+    {
+        Signal = 0,
+        Timeout = 1,
+        Error = 2
+    };
 
     TwWaitableEvent( bool manualReset = false, bool initialState = false)  //默认自动重置，未触发状态
         :m_handle(nullptr)
@@ -25,10 +31,10 @@ public:
         ResetEvent(m_handle);
     }
 
-    int wait(unsigned timeout = INFINITE)
+    State wait(unsigned timeout = INFINITE)
     {
-        DWORD ret = WaitForSingleObject (m_handle, timeout);  
-        return ret == WAIT_OBJECT_0 ? 0 : -1;  
+        DWORD ret = WaitForSingleObject(m_handle, timeout);
+        return ret == WAIT_OBJECT_0 ? Signal : WAIT_TIMEOUT ? Timeout : Error;
     }
 
     bool isSignal() 
