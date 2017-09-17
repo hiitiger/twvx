@@ -1,11 +1,12 @@
 #include "stable.h"
 #include "twthread.h"
+#include "twmsgloop.h"
 
 TwThread::TwThread()
     : TwThreadBase()
     , m_loop(nullptr)
 {
-
+    m_createThreadId = std::this_thread::get_id();
 }
 
 TwThread::~TwThread()
@@ -13,14 +14,34 @@ TwThread::~TwThread()
     stop();
 }
 
-void TwThread::stopQuick()
+bool TwThread::start()
 {
+    DAssert(m_createThreadId == std::this_thread::get_id());
+
+    DAssert(!isRunning());
+    DAssert(!isLoopRunning());
+
+    if (__super::start())
+    {
+        while (!isLoopRunning()) { ; }
+
+        return true;
+    }
+    return false;
+}
+
+void TwThread::stop()
+{
+    DAssert(m_createThreadId == std::this_thread::get_id());
+
     if (m_threadHandle)
     {
-        m_loop->quitQuick();
+        m_loop->postFunction([]() {
+            TwMessageLoop::current()->quitQuick();
+        });
 
         DWORD result = ::WaitForSingleObject(m_threadHandle, INFINITE);
-        TW_UNUSED(result);
+        (void)(result);
         DAssert(WAIT_OBJECT_0 == result);
 
         CloseHandle(m_threadHandle);
@@ -29,9 +50,11 @@ void TwThread::stopQuick()
     }
 }
 
-bool TwThread::postFunction( const std::function<void()>& func)
+bool TwThread::postFunctionUncheck(const std::function<void()>& func)
 {
-    if (m_loop)
+    DAssert(m_createThreadId == std::this_thread::get_id());
+
+    if (isLoopRunning())
     {
         m_loop->postFunction(func);
         return true;
@@ -40,16 +63,57 @@ bool TwThread::postFunction( const std::function<void()>& func)
     return false;
 }
 
-void TwThread::threadMain( )
+bool TwThread::postFunction(const std::function<void()>& func)
 {
-	TwMessageLoop msgLoop;
-    m_loop = &msgLoop;
+    std::lock_guard<std::mutex> lock(m_loopLock);
+    if (m_loop && isLoopRunning())
+    {
+        m_loop->postFunction(func);
+        return true;
+    }
+    return false;
+}
+
+bool TwThread::isLoopRunning()
+{
+    return m_loopRunning;
+}
+
+void TwThread::threadMain()
+{
+    TwMessageLoop msgLoop;
+    {
+        std::lock_guard<std::mutex> lock(m_loopLock);
+        m_loop = &msgLoop;
+    }
+
     init();
 
-    m_startEvent->set();
+    m_loopRunning = true;
 
-    threadLoop();
+    runloop();
 
-    uninit();
-    m_loop = nullptr;
+    m_loopRunning = false;
+
+    unInit();
+    {
+        std::lock_guard<std::mutex> lock(m_loopLock);
+        m_loop = nullptr;
+    }
+}
+
+
+void TwThread::init()
+{
+
+}
+
+void TwThread::runloop()
+{
+    m_loop->run();
+}
+
+void TwThread::unInit()
+{
+
 }
