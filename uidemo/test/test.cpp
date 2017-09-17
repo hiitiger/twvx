@@ -50,15 +50,7 @@ TwTestFun(TestWeakPtr)
 
 TwTestFun(TestTimer)
 {
-    TwTimer::startTimer(1000, [] {
-        TempLog<<"timer ticks";
-        return true;
-    });
 
-    TwTimer::startSingleShotTimer(100, [] {
-        TempLog<<"timer ticks single Shot";
-        return true;
-    });
     return true;
 }
 
@@ -175,7 +167,7 @@ struct WrString
      ww->setTitle(L"TestAsyncCall");
  
      //Safe Call
-     TwAsyncCall(ww, &TwWindow::setVisible, false, TwMessageLoop::currentLoop());
+    // TwAsyncCall(ww, &TwWindow::setVisible, false, TwMessageLoop::current());
      ww->deleteLater();
  
      bool exist = TwObjectDetect<TestCall>::isTwObjectType;
@@ -196,11 +188,11 @@ struct WrString
      int b = 20;
      int c = 30;
      int& d = c;
-     TwAsyncCall(cc, &TestCall::func1 ,ress , TwMessageLoop::currentLoop());
-     TwAsyncCall(cc, &TestCall::func2 ,ss , pi, TwMessageLoop::currentLoop());
-     TwAsyncCall(cc, &TestCall::func3 ,ss , a, b,  TwMessageLoop::currentLoop());
-     TwAsyncCall(cc, &TestCall::func4 ,ss , a, b, c, TwMessageLoop::currentLoop());
-     TwAsyncCall(cc, &TestCall::func5 ,ss , a, b, c, d, TwMessageLoop::currentLoop());
+    /* TwAsyncCall(cc, &TestCall::func1 ,ress , TwMessageLoop::current());
+     TwAsyncCall(cc, &TestCall::func2 ,ss , pi, TwMessageLoop::current());
+     TwAsyncCall(cc, &TestCall::func3 ,ss , a, b,  TwMessageLoop::current());
+     TwAsyncCall(cc, &TestCall::func4 ,ss , a, b, c, TwMessageLoop::current());
+     TwAsyncCall(cc, &TestCall::func5 ,ss , a, b, c, d, TwMessageLoop::current());*/
  
      std::cout<<std::boolalpha<<exist;
  //    TwHolderTraits<TestCall>::TwHolder p;
@@ -406,7 +398,7 @@ TwTestFun(TestProperty)
     DAssert(xyzh2 == 2014520);
 
     holder2->setProperty(L"name", L"new name");
-    DAssert(std::wstring(holder2->getProperty(L"name")) == L"new name");
+    DAssert(std::wstring(holder2->getProperty(L"name").getObject<std::wstring>()) == L"new name");
 
     //this will hit assert
    // int xyzErr = holder->getPropertyTy<int>(L"xyzErr");

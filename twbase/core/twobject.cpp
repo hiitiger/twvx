@@ -80,6 +80,11 @@ TwObject* TwObject::parent() const
 
 void TwObject::deleteLater()
 {
-    twBaseService()->asyncDeleteObject(this);
+    TwMessageLoop::current()->postFunction([weakSelf = TwWeakPtr<TwObject>(this)]() {
+        if (weakSelf)
+        {
+            delete weakSelf;
+        }
+    });
 }
 

@@ -47,8 +47,8 @@ TwScrollBar::TwScrollBar(TwWidget* parent /*= nullptr*/)
     m_maxButton->sigPressed.connect(this, &TwScrollBar::onMaxButtonPressed);
     m_maxButton->sigReleased.connect(this, &TwScrollBar::onMaxButtonReleased);
 
-    m_autoScrollTimer.setElapse(160);
-    m_autoScrollTimer.sigTimeOut.connect(this, &TwScrollBar::onAutoScrollTimerUpdate);
+    m_autoScrollTimer.setInterval(160);
+    m_autoScrollTimer.sigTimeout().connect(this, &TwScrollBar::onAutoScrollTimerUpdate);
 }
 
 TwScrollBar::~TwScrollBar()

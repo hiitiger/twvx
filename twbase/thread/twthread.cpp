@@ -29,17 +29,6 @@ void TwThread::stopQuick()
     }
 }
 
-bool TwThread::postTask( TwTask* task)
-{
-    if (m_loop)
-    {
-        m_loop->postTask(task);
-        return true;
-    }
-
-    return false;
-}
-
 bool TwThread::postFunction( const std::function<void()>& func)
 {
     if (m_loop)

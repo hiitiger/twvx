@@ -9,27 +9,43 @@
 class TW_BASE_API TwTimer : public TwObject
 {
     TW_CLASS_DECLARE(TwTimer);
+
 public:
     explicit TwTimer(TwObject* parent = nullptr);
-    virtual ~TwTimer();
 
-    // return false for stop timer;
-    static void startTimer(int milliSeconds, const std::function<bool()>& callback);
-    static void startSingleShotTimer(int milliSeconds, const std::function<bool()>& callback);
+    ~TwTimer();
 
-    void setElapse(int milliseconds);
+    void setInterval(int milliSeconds);
+
+    void setRepeat(bool);
+
+    void startSingleShot();
+
+    void startSingleShot(int milliSeconds);
+
     void start();
-    void start(int milliseconds);
+
+    void start(int milliSeconds);
+
     void stop();
 
     bool isActive() const;
 
-public Tw_Signal:
-     TwSignal<void()> sigTimeOut;
+    TwSignal<void()>& sigTimeout();
+
+protected:
+    void queueTimerTask();
+
+    void queueTimerTaskNext();
 
 private:
-    int m_timerId;
-    int m_elapseMSecs;
-}; 
+    friend class TimerCallback;
+
+    int m_intervalMilliSeconds = -1;
+    bool m_repeat = true;
+    std::shared_ptr<TimerCallback> m_callback;
+    TwSignal<void()> m_sigTimeout;
+};
+
 
 TW_CLASS_REGISTER(TwTimer);

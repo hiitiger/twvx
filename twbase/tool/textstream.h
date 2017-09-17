@@ -66,7 +66,7 @@ public:
     TextStream& operator<<(const void* d)
     {
         wchar_t text[k_printBufferSize] = { 0 };
-        _snwprintf_s(text, k_printBufferSize, _TRUNCATE, L"0x%08X", d);
+        _snwprintf_s(text, k_printBufferSize, _TRUNCATE, L"%p", d);
         m_data.append(text);
         return *this;
     }
