@@ -8,20 +8,28 @@ public:
     TwThread();
     virtual ~TwThread();
 
-    //just set quit flag, it will prevent remained tasks from running.
-    void stopQuick();
+    bool start();
+    void stop();
+
+    //unsafe, should only be called on create thead
+    bool postFunctionUncheck(const std::function<void()>&);
 
 
     bool postFunction(const std::function<void()>&);
 
+    bool isLoopRunning();
+
 protected:
     virtual void threadMain();
-    virtual void init() {;}
-    virtual void threadLoop() { m_loop->run(); }
-    virtual void uninit() {;}
+    virtual void init();
+    virtual void runloop();
+    virtual void uninit();
 
 private:
     // stack variable, live in threadLoop
-    TwMessageLoop* m_loop;
+    TwMessageLoop* m_loop = nullptr;
 
+    std::thread::id m_createThreadId;
+    std::atomic<bool> m_loopRunning = false;
+    std::mutex m_loopLock;
 };
